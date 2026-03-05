@@ -1,0 +1,17 @@
+{
+  "name": "projeto-faz-ae",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Isaque Oliveira, Enzo Miashita, Pedro Gama e Ícaro Alexandre",
+  "license": "ISC",
+  "description": "Projeto de Marketplace de Serviços de Freelance utilizando HTML, CSS, JavaScript e Node.js + Express",
+  "dependencies": {
+    "express": "^5.1.0",
+    "path": "^0.12.7"
+  }
+}

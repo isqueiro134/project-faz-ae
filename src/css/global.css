@@ -1,0 +1,26 @@
+/* Sistema de tamanhos - https://typescale.com
+Fontes - Minor Third - 1.200 - Em REM
+0.44 - 0.54 - 0.64 - 0.77 - 0.92 - 1.11 - 1.33 - 1.6 - 1.92 - 2.3 - 2.76 - 3.32 - 3.98 - 4.78 - 5.73 - 6.88 - 8.26
+
+Espaçamentos - Major Third - 1.250 - Em REM
+0.33 - 0.42 - 0.52 - 0.65 - 0.82 - 1.02 - 1.28 - 1.6 - 2 - 2.5 - 3.12 - 3.9 - 4.88 - 6.1 - 7.63 - 9.54 - 11.92
+*/
+
+/* Global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  color: #404040;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  background-color: #f4f5f7;
+}
