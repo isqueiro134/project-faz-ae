@@ -4,14 +4,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "dev": "node server.js"
   },
   "keywords": [],
   "author": "Isaque Oliveira, Enzo Miashita, Pedro Gama e Ícaro Alexandre",
   "license": "ISC",
+  "type": "module",
   "description": "Projeto de Marketplace de Serviços de Freelance utilizando HTML, CSS, JavaScript e Node.js + Express",
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^5.1.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pg": "^8.20.0"
   }
 }
