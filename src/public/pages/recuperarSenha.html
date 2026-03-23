@@ -2,60 +2,43 @@
 <html lang="pt-br">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Recuperar Senha</title>
-
-<link rel="stylesheet" href="../css/global.css">
-<link rel="stylesheet" href="../css/recuperarSenha.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/recuperarSenha.css">
 </head>
 
 <body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">FA</div>
+            <span>Faz Aê</span>
+        </div>
 
-<div class="container">
+        <div class="card">
+            <h2>Recuperar Senha</h2>
+            <p class="descricao">
+                Digite seu email ou CPF para recuperar sua senha
+            </p>
 
-    <div class="logo">
+            <label>Email ou CPF</label>
+            <input type="text" placeholder="seu@email.com ou 123.456.789-00">
 
-        <div class="logo-icon">FA</div>
-        <span>Faz Aê</span>
+            <button class="btn-enviar">
+                Enviar Instruções
+            </button>
 
-    </div>
+            <p class="voltar">
+                Lembrou sua senha?
+                <a href="/login">Voltar para Login</a>
+            </p>
+        </div>
 
-    <div class="card">
-
-        <h2>Recuperar Senha</h2>
-
-        <p class="descricao">
-        Digite seu email ou CPF para recuperar sua senha
+        <p class="ajuda">
+            Precisa de ajuda?
+            <a href="#">Entre em contato</a>
         </p>
-
-        <label>Email ou CPF</label>
-
-        <input 
-        type="text"
-        placeholder="seu@email.com ou 123.456.789-00"
-        >
-
-        <button class="btn-enviar">
-        Enviar Instruções
-        </button>
-
-        <p class="voltar">
-        Lembrou sua senha?
-        <a href="/login">Voltar para Login</a>
-        </p>
-
     </div>
-
-    <p class="ajuda">
-    Precisa de ajuda?
-    <a href="#">Entre em contato</a>
-    </p>
-
-</div>
-
 </body>
 </html>
