@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faz Aê - Cadastro</title>
+  <link rel="stylesheet" href="../css/cadastro.css">
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body>
+
+<main class="container">
+
+  <header class="logo">
+    <div class="logo-badge">FA</div>
+    <span>Faz Aê</span>
+  </header>
+
+  <div class="card">
+    <h2>Criar Conta</h2>
+    <p>Preencha os dados abaixo</p>
+
+    <form id="registroForm">
+      <div class="form-group">
+        <label for="nome" class="label">Nome Completo</label>
+        <input id="nome" class="input" type="text" placeholder="Ex: João Silva" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="label">Email</label>
+        <input id="email" class="input" type="email" placeholder="seu@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cpf" class="label">CPF</label>
+        <input id="cpf" class="input" type="text" placeholder="000.000.000-00" required maxlength="14" />
+      </div>
+
+      <div class="form-group">
+        <label for="senha" class="label">Senha</label>
+        <div class="password-wrapper">
+          <input id="senha" class="input" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+          <button type="button" class="toggle-btn" data-target="senha">ver</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmarSenha" class="label">Confirmar Senha</label>
+        <div class="password-wrapper">
+          <input id="confirmarSenha" class="input" type="password" placeholder="Repita a senha" required />
+          <button type="button" class="toggle-btn" data-target="confirmarSenha">ver</button>
+        </div>
+        <span id="errorSenha" class="error-msg">As senhas não coincidem.</span>
+      </div>
+
+      <label class="checkbox-wrapper">
+        <input type="checkbox" required />
+        <span>Concordo com os <a href="#" style="color:var(--primary)">Termos de Serviço</a></span>
+      </label>
+
+      <button type="submit" class="btn">Cadastrar Agora</button>
+    </form>
+
+    <div class="footer-link">
+      Já tem conta? <a href="login.html">Faça Login</a>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Lógica unificada para mostrar/ocultar senha
+  document.querySelectorAll('.toggle-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      const isPassword = input.type === 'password';
+      
+      input.type = isPassword ? 'text' : 'password';
+      this.textContent = isPassword ? 'ocultar' : 'ver';
+    });
+  });
+
+  // Validação de senhas em tempo real
+  const form = document.getElementById('registroForm');
+  const senha = document.getElementById('senha');
+  const confirma = document.getElementById('confirmarSenha');
+  const erroMsg = document.getElementById('errorSenha');
+
+  form.addEventListener('submit', (e) => {
+    if (senha.value !== confirma.value) {
+      e.preventDefault(); // Impede o envio
+      confirma.classList.add('invalid');
+      erroMsg.style.display = 'block';
+    } else {
+      confirma.classList.remove('invalid');
+      erroMsg.style.display = 'none';
+      alert('Cadastro realizado com sucesso!');
+    }
+  });
+
+  // Exemplo simples de máscara de CPF (opcional)
+  document.getElementById('cpf').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    e.target.value = value;
+  });

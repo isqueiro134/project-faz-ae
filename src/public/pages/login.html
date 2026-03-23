@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faz Aê - Login</title>
+  <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body>
+
+<main class="container">
+  <header class="logo">
+    <div class="logo-badge">FA</div>
+    <span>Faz Aê</span>
+  </header>
+
+  <div class="card">
+    <h2>Entrar em Faz Aê</h2>
+    <p>Acesse sua conta com email ou CPF</p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="identificador" class="label">Email ou CPF</label>
+        <input id="identificador" class="input" type="text" placeholder="ex: seu@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="senha" class="label">Senha</label>
+        <div class="password-wrapper">
+          <input id="senha" class="input" type="password" placeholder="Sua senha" required />
+          <button type="button" id="toggleSenha" class="toggle-btn" aria-label="Mostrar senha">ver</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+
+    <div class="links">
+      <div><a href="#">Esqueci minha senha</a></div>
+      <div style="margin-top:8px">Não tem conta? <a href="cadastro.html">Cadastre-se</a></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Ao entrar, você concorda com nossos <a href="#">Termos de Serviço</a>
+  </footer>
+</main>
+
+<script>
+  const inputSenha = document.getElementById('senha');
+  const btnToggle = document.getElementById('toggleSenha');
+  const loginForm = document.getElementById('loginForm');
+
+  // Lógica de mostrar/ocultar senha
+  btnToggle.addEventListener('click', () => {
+    const isPassword = inputSenha.type === 'password';
+    inputSenha.type = isPassword ? 'text' : 'password';
+    btnToggle.textContent = isPassword ? 'ocultar' : 'ver';
+    btnToggle.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+  });
+
+  // Exemplo de captura de envio
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Tentativa de login enviada!');
+  });
+</script>
+
+</body>
+</html>
