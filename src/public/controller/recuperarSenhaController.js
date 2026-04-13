@@ -4,16 +4,16 @@ document.querySelector("#recuperarSenhaBT").addEventListener('click', async (eve
 
     try {
         const response = await fetch('/recuperar-senha', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
             },
-            body: JSON.stringify(user)
+            body : JSON.stringify(user)
         })
 
         if (response.ok) {
             const result = await response.json();
-        } else {
+        }else {
             console.error("Erro no servidor", response.status);
         }
     } catch (error) {

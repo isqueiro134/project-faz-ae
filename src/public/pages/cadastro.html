@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faz Aê - Cadastro</title>
+  <link rel="stylesheet" href="../css/cadastro.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <script src="../controller/cadastroController.js" defer></script>
+</head>
+<body>
+
+<main class="container">
+
+  <header class="logo">
+    <div class="logo-badge">FA</div>
+    <span>Faz Aê</span>
+  </header>
+
+  <div class="card">
+    <h2>Criar Conta</h2>
+    <p>Preencha os dados abaixo</p>
+
+    <form id="registroForm">
+      <div class="form-group">
+        <label for="nome" class="label">Nome Completo</label>
+        <input id="nome" name="nome" class="input" type="text" placeholder="Ex: João Silva" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="label">Email</label>
+        <input id="email" name="email" class="input" type="email" placeholder="seu@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cpf" class="label">CPF</label>
+        <input id="cpf" name="cpf" class="input" type="text" placeholder="000.000.000-00" required maxlength="14" />
+      </div>
+
+      <div class="form-group">
+        <label for="senha" class="label">Senha</label>
+        <div class="password-wrapper">
+          <input id="senha" name="senha" class="input" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+          <button type="button" class="toggle-btn" data-target="senha">ver</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmarSenha" class="label">Confirmar Senha</label>
+        <div class="password-wrapper">
+          <input id="confirmarSenha" name="confirmarSenha" class="input" type="password" placeholder="Repita a senha" required />
+          <button type="button" class="toggle-btn" data-target="confirmarSenha">ver</button>
+        </div>
+        <span id="errorSenha" class="error-msg">As senhas não coincidem.</span>
+      </div>
+
+      <label class="checkbox-wrapper">
+        <input type="checkbox" required />
+        <span>Concordo com os <a href="#" style="color:var(--primary)">Termos de Serviço</a></span>
+      </label>
+
+      <button type="submit" class="btn">Cadastrar Agora</button>
+    </form>
+
+    <div class="footer-link">
+      Já tem conta? <a href="login.html">Faça Login</a>
+    </div>
+  </div>
+
+</main>
+  

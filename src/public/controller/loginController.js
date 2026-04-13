@@ -8,18 +8,18 @@ loginForm.addEventListener('submit', async (event) => {
 
     try {
         const response = await fetch('/efetua-login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
             },
-            body: JSON.stringify(dados)
+            body : JSON.stringify(dados)
         })
 
         if (response.ok) {
             const result = await response.json();
             console.log("deu certo");
             console.log(result);
-        } else {
+        }else {
             console.error("Erro no servidor", response.status);
         }
     } catch (error) {
@@ -29,12 +29,12 @@ loginForm.addEventListener('submit', async (event) => {
 
 const inputSenha = document.getElementById('senha');
 const btnToggle = document.getElementById('toggleSenha');
-
+  
 
 // Lógica de mostrar/ocultar senha
 btnToggle.addEventListener('click', () => {
-    const isPassword = inputSenha.type === 'password';
-    inputSenha.type = isPassword ? 'text' : 'password';
-    btnToggle.textContent = isPassword ? 'ocultar' : 'ver';
-    btnToggle.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+const isPassword = inputSenha.type === 'password';
+inputSenha.type = isPassword ? 'text' : 'password';
+btnToggle.textContent = isPassword ? 'ocultar' : 'ver';
+btnToggle.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
 });
