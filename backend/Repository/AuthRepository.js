@@ -10,7 +10,7 @@ class AuthRepository {
         });
 
         if (error) {
-            throw new error(`[${error.status}]: ${error.message}`);
+            throw new Error(`[${error.status}]: ${error.message}`);
         }
 
         return data;
@@ -24,7 +24,7 @@ class AuthRepository {
         });
 
         if (error) {
-            throw new error(`[${error.status}]: ${error.message}`);
+            throw new Error(`[${error.status}]: ${error.message}`);
         }
 
         return data;
@@ -35,7 +35,7 @@ class AuthRepository {
         const { error } = await supabase.auth.signOut();
 
         if (error) {
-            throw new error(`[${error.status}]: ${error.message}`);
+            throw new Error(`[${error.status}]: ${error.message}`);
         }
 
     }
@@ -45,7 +45,7 @@ class AuthRepository {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
         if (error) {
-            throw new error(`[${error.status}]: ${error.message}`);
+            throw new Error(`[${error.status}]: ${error.message}`);
         }
 
         return data;
@@ -56,9 +56,11 @@ class AuthRepository {
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
-            throw new error(`[${error.status}]: ${error.message}`);
+            throw new Error(`[${error.status}]: ${error.message}`);
         }
 
         return data.session;
     }
 }
+
+export default AuthRepository;
