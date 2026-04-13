@@ -1,5 +1,7 @@
+import Auth from '../services/auth.js';
+
 const form = document.querySelector("#registroForm");
-const senha = document.getElementById('senha');
+const senha = document.getElementById('password');
 const confirma = document.getElementById('confirmarSenha');
 const erroMsg = document.getElementById('errorSenha');
 
@@ -14,25 +16,25 @@ form.addEventListener("submit", async (event) => {
         erroMsg.style.display = 'none';
 
         const formData = new FormData(event.target);
-        const dados = Object.fromEntries(formData.entries());
+        const data = {
+            email: formData.get("email"),
+            password: formData.get("password"),
+            metadata: {
+                full_name: formData.get("name")
+            },
+        };
+
+        console.log(`dados capturados: ${JSON.stringify(data, null, 2)}`);
 
         try {
-            const response = await fetch('/efetua-cadastro', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dados)
-            })
+            const result = await new Auth().register(data);
 
-            if (response.ok) {
-                const result = await response.json();
-                console.log(result.status);
-            } else {
-                console.error("Erro no servidor", response.status);
-            }
+            alert("Cadastro realizado com sucesso!");
+            window.location.href = "/login";
+            return result;
         } catch (error) {
-            console.error("Erro na requisicao", erro);
+            console.error(error);
+            alert(error.message);
         }
 
     }
@@ -49,15 +51,4 @@ document.querySelectorAll('.toggle-btn').forEach(button => {
         input.type = isPassword ? 'text' : 'password';
         this.textContent = isPassword ? 'ocultar' : 'ver';
     });
-});
-
-// Exemplo simples de máscara de CPF (opcional)
-document.getElementById('cpf').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 11) value = value.slice(0, 11);
-
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    e.target.value = value;
 });

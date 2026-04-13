@@ -1,7 +1,6 @@
-import { supabase } from "../config/db";
+import { supabase } from "../config/db.js";
 
 class AuthRepository {
-    // 1. Register
     async register(email, password, metadata) {
         const { data, error } = await supabase.auth.signUp({
             email: email,
@@ -16,7 +15,6 @@ class AuthRepository {
         return data;
     }
 
-    // 2. Sign In
     async signIn(email, password) {
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
@@ -30,7 +28,6 @@ class AuthRepository {
         return data;
     }
 
-    // 3. Logout
     async signOut() {
         const { error } = await supabase.auth.signOut();
 
@@ -40,7 +37,6 @@ class AuthRepository {
 
     }
 
-    // 4. Reset Password
     async resetPassword(email) {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
@@ -51,7 +47,7 @@ class AuthRepository {
         return data;
     }
 
-    // 5. Get Current Session (Este é síncrono ou retorna direto, raramente falha)
+    // Get Current Session (Este é síncrono ou retorna direto, raramente falha)
     async getCurrentSession() {
         const { data, error } = await supabase.auth.getSession();
 
