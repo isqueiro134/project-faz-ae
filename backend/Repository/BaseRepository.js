@@ -1,4 +1,4 @@
-import supabase from '../config/db.js';
+import { supabase } from '../config/db.js';
 
 class BaseRepository {
     async getAll(table, columnsArray) {

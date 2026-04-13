@@ -16,11 +16,13 @@ router
         }
     })
     .post(async (req, res) => {
-        const { email, senha, metadata } = req.body;
+        const { email, password, metadata } = req.body;
         try {
-            const result = await new AuthRepository().register(email, senha, metadata);
+            const result = await new AuthRepository().register(email, password, metadata);
             res.status(200).send(result);
         } catch (error) {
             res.status(404).send(`User not found: ${error}`);
         }
     })
+
+export default router;
