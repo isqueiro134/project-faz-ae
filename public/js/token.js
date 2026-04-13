@@ -1,4 +1,3 @@
-
 export default async function autenticacao() {
     try {
         const meuToken = getCookie('token');
