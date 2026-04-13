@@ -7,6 +7,7 @@
     <title>Recuperar Senha</title>
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/recuperarSenha.css">
+    <script src="../controller/recuperarSenhaController.js" defer></script>
 </head>
 
 <body>
@@ -23,9 +24,9 @@
             </p>
 
             <label>Email ou CPF</label>
-            <input type="text" placeholder="seu@email.com ou 123.456.789-00">
+            <input id="usuario" type="text" placeholder="seu@email.com ou 123.456.789-00">
 
-            <button class="btn-enviar">
+            <button class="btn-enviar" id="recuperarSenhaBT">
                 Enviar Instruções
             </button>
 

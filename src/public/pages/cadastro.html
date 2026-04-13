@@ -6,6 +6,7 @@
   <title>Faz Aê - Cadastro</title>
   <link rel="stylesheet" href="../css/cadastro.css">
   <link rel="stylesheet" href="../css/global.css">
+  <script src="../controller/cadastroController.js" defer></script>
 </head>
 <body>
 
@@ -23,23 +24,23 @@
     <form id="registroForm">
       <div class="form-group">
         <label for="nome" class="label">Nome Completo</label>
-        <input id="nome" class="input" type="text" placeholder="Ex: João Silva" required />
+        <input id="nome" name="nome" class="input" type="text" placeholder="Ex: João Silva" required />
       </div>
 
       <div class="form-group">
         <label for="email" class="label">Email</label>
-        <input id="email" class="input" type="email" placeholder="seu@email.com" required />
+        <input id="email" name="email" class="input" type="email" placeholder="seu@email.com" required />
       </div>
 
       <div class="form-group">
         <label for="cpf" class="label">CPF</label>
-        <input id="cpf" class="input" type="text" placeholder="000.000.000-00" required maxlength="14" />
+        <input id="cpf" name="cpf" class="input" type="text" placeholder="000.000.000-00" required maxlength="14" />
       </div>
 
       <div class="form-group">
         <label for="senha" class="label">Senha</label>
         <div class="password-wrapper">
-          <input id="senha" class="input" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+          <input id="senha" name="senha" class="input" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" />
           <button type="button" class="toggle-btn" data-target="senha">ver</button>
         </div>
       </div>
@@ -47,7 +48,7 @@
       <div class="form-group">
         <label for="confirmarSenha" class="label">Confirmar Senha</label>
         <div class="password-wrapper">
-          <input id="confirmarSenha" class="input" type="password" placeholder="Repita a senha" required />
+          <input id="confirmarSenha" name="confirmarSenha" class="input" type="password" placeholder="Repita a senha" required />
           <button type="button" class="toggle-btn" data-target="confirmarSenha">ver</button>
         </div>
         <span id="errorSenha" class="error-msg">As senhas não coincidem.</span>
@@ -67,45 +68,4 @@
   </div>
 
 </main>
-
-<script>
-  // Lógica unificada para mostrar/ocultar senha
-  document.querySelectorAll('.toggle-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const targetId = this.getAttribute('data-target');
-      const input = document.getElementById(targetId);
-      const isPassword = input.type === 'password';
-      
-      input.type = isPassword ? 'text' : 'password';
-      this.textContent = isPassword ? 'ocultar' : 'ver';
-    });
-  });
-
-  // Validação de senhas em tempo real
-  const form = document.getElementById('registroForm');
-  const senha = document.getElementById('senha');
-  const confirma = document.getElementById('confirmarSenha');
-  const erroMsg = document.getElementById('errorSenha');
-
-  form.addEventListener('submit', (e) => {
-    if (senha.value !== confirma.value) {
-      e.preventDefault(); // Impede o envio
-      confirma.classList.add('invalid');
-      erroMsg.style.display = 'block';
-    } else {
-      confirma.classList.remove('invalid');
-      erroMsg.style.display = 'none';
-      alert('Cadastro realizado com sucesso!');
-    }
-  });
-
-  // Exemplo simples de máscara de CPF (opcional)
-  document.getElementById('cpf').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 11) value = value.slice(0, 11);
-    
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-    e.target.value = value;
-  });
+  
