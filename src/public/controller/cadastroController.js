@@ -27,8 +27,7 @@ form.addEventListener("submit", async (event) => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("deu certo");
-        console.log(result);
+        console.log(result.status);
       } else {
         console.error("Erro no servidor", response.status);
       }
