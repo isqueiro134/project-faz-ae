@@ -1,81 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Onboarding</title>
-
-<link rel="stylesheet" href="../css/global.css">
-<link rel="stylesheet" href="../css/onboarding.css">
-
-<script src="../controller/onboardingController.js" defer></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/onboarding.css">
+    <script type="module" src="../js/onboarding.js" defer></script>
 </head>
 
 <body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">FA</div>
+                <span>Faz Aê</span>
+            </div>
+            <nav>
+                <p>Menu Principal</p>
+                <ul>
+                    <li><a class="link" href="/dashboard">Dashboard</a></li> 
+                    <li><a class="link" href="/publicar-projeto">Publicar Projeto</a></li>
+                    <li><a class="link" href="/meus-projetos">Meus Projetos</a></li>
+                    <li><a class="link" href="/freelancers">Freelancers</a></li>
+                    <li><a class="link" href="/mensagens">Mensagens</a></li>
+                </ul>
+            </nav>
+        </aside>
 
-<div class="layout">
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-
-<div class="logo">
-<div class="logo-icon">FA</div>
-<span>Faz Aê</span>
-</div>
-
-<nav>
-<p>Menu Principal</p>
-<ul>
-<li>Dashboard</li>
-<li>Publicar Projeto</li>
-<li>Meus Projetos</li>
-<li>Freelancers</li>
-<li>Mensagens</li>
-</ul>
-</nav>
-
-</aside>
-
-
-<!-- CONTEÚDO -->
-<main class="main">
-
-<div class="onboarding-card">
-
-<h2>Bem-vindo, Ícaro!</h2>
-<p class="subtitle">
-Como você gostaria de usar a plataforma Faz Aê?
-</p>
-
-<div class="options">
-
-<div class="option" data-type="freelancer">
-<h3>Sou Freelancer</h3>
-<p>Ofereça seus serviços e receba propostas</p>
-</div>
-
-<div class="option" data-type="cliente">
-<h3>Sou Cliente</h3>
-<p>Publique projetos e encontre freelancers</p>
-</div>
-
-</div>
-
-<div class="actions">
-
-<button class="btn-secondary">Voltar</button>
-<button class="btn-primary" id="continue">Continuar</button>
-
-</div>
-
-</div>
-
-</main>
-
-</div>
-
+        <main class="main">
+            <div class="onboarding-card">
+                <h2>Bem-vindo, <span id="nomeUsuario"></span>!</h2>
+                <p class="subtitle">
+                    Como você gostaria de usar a plataforma Faz Aê?
+                </p>
+                <div class="options">
+                    <div class="option" data-type="freelancer">
+                        <h3>Sou Freelancer</h3>
+                        <p>Ofereça seus serviços e receba propostas</p>
+                    </div>
+                    <div class="option" data-type="cliente">
+                        <h3>Sou Cliente</h3>
+                        <p>Publique projetos e encontre freelancers</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-secondary">Voltar</button>
+                    <button class="btn-primary" id="continue">Continuar</button>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
+
 </html>
