@@ -24,3 +24,16 @@ body {
   line-height: 1.4;
   background-color: #f4f5f7;
 }
+
+.link {
+  text-decoration: none;
+  color: #d1d5db;
+}
+
+.link:hover {
+  color: #16a34a;
+}
+
+.link.active {
+  color: #16a34a;
+}

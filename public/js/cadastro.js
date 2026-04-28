@@ -24,8 +24,6 @@ form.addEventListener("submit", async (event) => {
             },
         };
 
-        console.log(`dados capturados: ${JSON.stringify(data, null, 2)}`);
-
         try {
             const result = await new Auth().register(data);
 

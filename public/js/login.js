@@ -1,35 +1,29 @@
+import Auth from '../services/auth.js';
+
 const loginForm = document.getElementById('loginForm');
+const inputSenha = document.getElementById('senha');
+const btnToggle = document.getElementById('toggleSenha');
 
 loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    const dados = Object.fromEntries(formData.entries());
+    const data = {
+        email: formData.get("email"),
+        password: formData.get("password"),
+    };
 
     try {
-        const response = await fetch('/efetua-login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dados)
-        })
+        const result = await new Auth().login(data);
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log("deu certo");
-            console.log(result);
-        } else {
-            console.error("Erro no servidor", response.status);
-        }
+        alert("Login realizado com sucesso!");
+        window.location.href = "/onboarding";
+        return result;
     } catch (error) {
-        console.error("Erro na requisicao", erro);
+        console.error(error);
+        alert(error.message);
     }
 })
-
-const inputSenha = document.getElementById('senha');
-const btnToggle = document.getElementById('toggleSenha');
-
 
 // Lógica de mostrar/ocultar senha
 btnToggle.addEventListener('click', () => {
