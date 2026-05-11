@@ -23,75 +23,68 @@ O objetivo do projeto é conectar clientes e freelancers por meio de uma platafo
 
 ```text
 projeto-faz-ae/
-├── app.js
-├── package.json
-├── .env.example
-├── banco.db
-├── backend/
-│   ├── config/
-│   │   ├── db.js
-│   │   └── schema.sql
-│   ├── Repository/
-│   │   ├── BaseRepository.js
-│   │   ├── AuthRepository.js
-│   │   └── UserRepository.js
-│   ├── routes/
-│   │   ├── userRouter.js
-│   │   └── viewRouter.js
-│   └── utils/
-│       └── dirname.js
-└── public/
-    ├── pages/
-    ├── css/
-    ├── js/
-    └── services/
+|-- app.js
+|-- package.json
+|-- .env.example
+|-- banco.db
+|-- backend/
+|   |-- config/
+|   |   |-- db.js
+|   |   `-- schema.sql
+|   |-- Repository/
+|   |   |-- BaseRepository.js
+|   |   |-- AuthRepository.js
+|   |   `-- UserRepository.js
+|   |-- routes/
+|   |   |-- userRouter.js
+|   |   `-- viewRouter.js
+|   `-- utils/
+|       `-- dirname.js
+`-- public/
+    |-- pages/
+    |-- css/
+    |-- js/
+    `-- services/
 ```
 
 ## Pré-requisitos
 
-- Node.js 20+ (recomendado 22+)
+- Node.js 20+ recomendado
 - npm 10+
 
 ## Configuração do Ambiente
 
-1. Clone o repositório:
-
-```bash
-git clone <url-do-repositorio>
-cd projeto-faz-ae
-```
-
-2. Instale as dependências:
+1. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-3. Crie o arquivo `.env` com base no exemplo:
+2. Crie o arquivo `.env` com base no exemplo:
 
 ```bash
 cp .env.example .env
 ```
 
-No Windows (PowerShell):
+No Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-4. Defina ao menos a variável abaixo no `.env`:
+3. Configure as variáveis:
 
 ```env
 PORT=3000
+SQLITE_DB_PATH=./banco.db
 ```
 
-> Observação: o `.env.example` ainda contém variáveis legadas do Supabase. O backend atual já usa SQLite para inicialização do schema.
-
-## Banco de Dados (SQLite)
+## Banco de Dados SQLite
 
 O arquivo `backend/config/db.js`:
 
-- abre conexão com o SQLite em `./banco.db`;
+- abre conexão com o banco definido em `SQLITE_DB_PATH`;
+- usa `./banco.db` como caminho padrão;
 - habilita `foreign_keys`;
 - aplica `journal_mode = WAL`;
 - lê e executa o schema de `backend/config/schema.sql`.
@@ -120,7 +113,7 @@ Com `PORT=3000`:
 
 ## Rotas Disponíveis
 
-### Rotas de páginas (View Router)
+### Rotas de páginas
 
 - `GET /` -> `home.html`
 - `GET /login` -> `login.html`
@@ -129,16 +122,16 @@ Com `PORT=3000`:
 - `GET /onboarding` -> `onboarding.html`
 - `GET /dashboard` -> `dashboard.html`
 
-### Rotas de API (Users)
+### API de usuários
 
 Base: `/api/users`
 
 - `GET /api/users`
-  - busca usuário por `id` (enviado atualmente no corpo da requisição).
+  - busca usuário por `id` enviado atualmente no corpo da requisição.
 - `POST /api/users`
   - cria registro de usuário com `email`, `password` e `metadata`.
 
-Exemplo de payload (`POST /api/users`):
+Exemplo de payload:
 
 ```json
 {
@@ -152,33 +145,23 @@ Exemplo de payload (`POST /api/users`):
 
 ## Modelo de Dados
 
-O `schema.sql` define as tabelas:
+O `schema.sql` define tabelas relacionais para usuários, perfis, clientes, freelancers, jobs, propostas e avaliações, com chaves estrangeiras e constraints para integridade dos dados.
 
-- `users`
-- `profiles`
-- `client_profiles`
-- `freelancer_profiles`
-- `jobs`
-- `proposals`
-- `reviews`
+## Estado Atual
 
-Com relacionamentos via chaves estrangeiras e constraints para garantir integridade dos dados.
+O projeto usa SQLite como banco de dados. A camada de repositórios deve consultar e persistir dados usando SQL nativo por meio da conexão definida em `backend/config/db.js`.
 
-## Estado Atual do Projeto
+Próximos passos recomendados:
 
-O projeto está em transição de uma camada antiga baseada em Supabase para SQLite. Por isso, algumas classes em `backend/Repository/` ainda referenciam `supabase` e devem ser adaptadas para consultas SQL nativas.
-
-Itens recomendados para próximos passos:
-
-- refatorar `BaseRepository`, `AuthRepository` e `UserRepository` para SQLite;
-- atualizar `.env.example` removendo variáveis legadas;
-- padronizar rotas REST (ex.: usar `GET /api/users/:id` em vez de `GET` com body);
+- finalizar os endpoints consumidos pelo frontend;
+- padronizar rotas REST, como `GET /api/users/:id`;
+- adicionar validação de entrada;
 - adicionar scripts de lint, testes e seed.
 
 ## Scripts npm
 
 - `npm run dev` -> inicia o servidor com `node --watch app.js`
-- `npm test` -> placeholder (ainda não implementado)
+- `npm test` -> placeholder
 
 ## Equipe
 
