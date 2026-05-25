@@ -1,119 +1,120 @@
-    :root {
-      --primary: #16a34a;
-      --primary-hover: #15803d;
-      --bg-body: #0b0f0d;
-      --bg-card: #111827;
-      --bg-input: #020617;
-      --border: #1f2937;
-      --text-main: #d1d5db;
-      --text-muted: #9ca3af;
-    }
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-5);
+  background:
+    radial-gradient(circle at top, rgba(22, 163, 74, 0.12), transparent 30rem),
+    var(--color-page);
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-    
-    body {
-      background: var(--bg-body);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-main);
-      padding: 20px;
-    }
+.container {
+  width: min(100%, 38rem);
+  text-align: center;
+}
 
-    .container { width: 100%; max-width: 340px; text-align: center; }
+.logo {
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  color: var(--color-text);
+  font-size: 2.2rem;
+}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
+.card {
+  padding: var(--space-8);
+  text-align: left;
+}
 
-    .logo-badge {
-      background: var(--primary);
-      color: white;
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+.card h2 {
+  margin-bottom: var(--space-1);
+  color: var(--color-text);
+  font-size: 2rem;
+}
 
-    .logo span { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.card p {
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      text-align: left;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    }
+.form-group {
+  margin-bottom: var(--space-4);
+}
 
-    .card h2 { font-size: 18px; margin-bottom: 6px; color: #fff; }
-    .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+.password-wrapper {
+  position: relative;
+}
 
-    .form-group { margin-bottom: 16px; position: relative; }
+.password-wrapper .input {
+  padding-right: 6rem;
+}
 
-    .label { font-size: 13px; font-weight: 500; margin-bottom: 6px; display: block; color: var(--text-main); }
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  padding: var(--space-2);
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
 
-    .input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      background: var(--bg-input);
-      color: white;
-      font-size: 14px;
-      transition: border-color 0.2s, ring 0.2s;
-    }
+.toggle-btn:hover {
+  color: var(--color-primary);
+}
 
-    .input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
-    }
+.btn {
+  width: 100%;
+}
 
-    .password-wrapper { position: relative; }
+.links {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 1.3rem;
+}
 
-    /* Estilizando o botão de toggle como um botão real para acessibilidade */
-    .toggle-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: bold;
-      padding: 4px;
-    }
+.links a,
+.footer a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
 
-    .toggle-btn:hover { color: #fff; }
+.links a:hover,
+.footer a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 15px;
-      transition: background 0.3s;
-      margin-top: 8px;
-    }
+.footer {
+  margin-top: var(--space-6);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 1.2rem;
+}
 
-    .btn:hover { background: var(--primary-hover); }
+@media (max-width: 42rem) {
+  body {
+    align-items: flex-start;
+    padding: var(--space-6) var(--space-4);
+  }
 
-    .links { text-align: center; margin-top: 16px; font-size: 13px; }
-    .links a { color: #22c55e; text-decoration: none; transition: opacity 0.2s; }
-    .links a:hover { text-decoration: underline; }
+  .container {
+    width: 100%;
+  }
 
-    .footer { margin-top: 24px; font-size: 12px; color: #6b7280; text-align: center; }
-    .footer a { color: #22c55e; text-decoration: none; }
+  .logo {
+    margin-bottom: var(--space-5);
+  }
+
+  .card {
+    padding: var(--space-6);
+  }
+}

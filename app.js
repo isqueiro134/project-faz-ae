@@ -9,8 +9,8 @@ const app = express();
 await connectDB();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.use(express.json());
 app.use(express.static('public'));
+app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/", viewRouter);
 

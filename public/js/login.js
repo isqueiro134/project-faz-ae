@@ -1,7 +1,7 @@
 import Auth from '../services/auth.js';
 
 const loginForm = document.getElementById('loginForm');
-const inputSenha = document.getElementById('senha');
+const inputSenha = document.getElementById('password');
 const btnToggle = document.getElementById('toggleSenha');
 
 loginForm.addEventListener('submit', async (event) => {

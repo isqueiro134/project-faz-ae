@@ -1,36 +1,7 @@
-import autenticacao from "./token";
-
-if (!autenticacao) {
-    window.location.href = "/home";
-}
-
-try {
-    const response = await fetch('/dados-dashboard', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dados)
-    })
-
-    if (response.ok) {
-        const result = await response.json();
-    } else {
-        console.error("Erro no servidor", response.status);
-    }
-} catch (error) {
-    console.error("Erro na requisicao", erro);
-}
-
-
-/**
-        * CONTROLLER - Lógica da Aplicação
-        */
 const controller = {
-    // Dados fictícios (Simulando uma API)
     projects: [
         { id: 1, title: 'Desenvolvimento Site', dev: 'Ana Silva', progress: 65, price: '3.500', status: 'ongoing', label: 'Em Andamento' },
-        { id: 2, title: 'Design de Logo', dev: 'Carlos Mendes', progress: 90, price: '1.200', status: 'review', label: 'Em Revisão' }
+        { id: 2, title: 'Design de Logo', dev: 'Carlos Mendes', progress: 90, price: '1.200', status: 'review', label: 'Em Revis\u00e3o' }
     ],
 
     init() {
@@ -40,43 +11,47 @@ const controller = {
 
     renderProjects() {
         const list = document.getElementById('project-list');
-        list.innerHTML = this.projects.map(p => `
-                    <div class="project-card ${p.id === 1 ? 'active' : ''}" onclick="controller.selectProject(${p.id})">
-                        <div class="project-info">
-                            <div>
-                                <strong>${p.title}</strong>
-                                <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">${p.dev} ★ 4.9</p>
-                            </div>
-                            <span class="status-badge ${p.status}">${p.label}</span>
-                        </div>
-                        <div class="progress-container">
-                            <div class="progress-fill" style="width: ${p.progress}%"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim)">
-                            <span>R$ ${p.price}</span>
-                            <span>Progresso: ${p.progress}%</span>
-                        </div>
+
+        list.innerHTML = this.projects.map((project) => `
+            <div class="project-card ${project.id === 1 ? 'active' : ''}" onclick="controller.selectProject(${project.id})">
+                <div class="project-info">
+                    <div>
+                        <strong>${project.title}</strong>
+                        <p class="project-dev">${project.dev} &#9733; 4.9</p>
                     </div>
-                `).join('');
+                    <span class="status-badge ${project.status}">${project.label}</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" style="width: ${project.progress}%"></div>
+                </div>
+                <div class="project-meta">
+                    <span>R$ ${project.price}</span>
+                    <span>Progresso: ${project.progress}%</span>
+                </div>
+            </div>
+        `).join('');
     },
 
     selectProject(id) {
         console.log("Projeto selecionado:", id);
-        // Lógica para trocar o contexto do chat/timeline aqui
     },
 
     sendMessage() {
         const input = document.getElementById('chat-input');
         const chatBox = document.getElementById('chat-messages');
+        const value = input.value.trim();
 
-        if (input.value.trim() !== "") {
-            const msg = document.createElement('div');
-            msg.className = 'bubble sent';
-            msg.innerHTML = `${input.value} <br><small>${new Date().getHours()}:${new Date().getMinutes()}</small>`;
-            chatBox.appendChild(msg);
-            input.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        if (!value) return;
+
+        const message = document.createElement('div');
+        const now = new Date();
+        const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+        message.className = 'bubble sent';
+        message.innerHTML = `${value} <br><small>${time}</small>`;
+        chatBox.appendChild(message);
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
     },
 
     newProject() {
@@ -84,11 +59,11 @@ const controller = {
     },
 
     setupEventListeners() {
-        document.getElementById('chat-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
+        document.getElementById('chat-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') this.sendMessage();
         });
     }
 };
 
-// Inicia o app
+window.controller = controller;
 controller.init();
