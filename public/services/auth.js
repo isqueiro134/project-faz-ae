@@ -13,9 +13,10 @@ class Auth {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log(result.status);
+                localStorage.setItem('fazAeUser', JSON.stringify(result.user));
+                return result;
             } else {
-                console.error("Erro no servidor", response.status);
+                throw new Error("Nao foi possivel criar sua conta.");
             }
         } catch (error) {
             console.error("Erro na requisicao", error);
@@ -34,9 +35,10 @@ class Auth {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log(result.status);
+                localStorage.setItem('fazAeUser', JSON.stringify(result.user));
+                return result;
             } else {
-                console.error("Erro no servidor", response.status);
+                throw new Error("Email ou senha invalidos.");
             }
         } catch (error) {
             console.error("Erro na requisicao", error);

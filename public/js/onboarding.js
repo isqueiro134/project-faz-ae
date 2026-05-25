@@ -1,25 +1,20 @@
-import autenticacao from "../services/token.js";
-import Auth from "../services/auth.js";
-
-if (!autenticacao) {
-    window.location.href = "/login";
-}
-
 const nomeUsuario = document.getElementById('nomeUsuario');
 const continueButton = document.getElementById('continue');
+const options = document.querySelectorAll('.option');
+let selectedType = 'freelancer';
 
-nomeUsuario.addEventListener('change', async () => {
-    try {
-        const result = await new Auth().getById();
+const user = JSON.parse(localStorage.getItem('fazAeUser') || 'null');
+nomeUsuario.textContent = user?.full_name || 'profissional';
+document.querySelector('[data-type="freelancer"]')?.classList.add('active');
 
-        alert("Login realizado com sucesso!");
-        window.location.href = "/onboarding";
-        return result;
-    } catch (error) {
-        console.error(error);
-        alert(error.message);
-    }
-})
+options.forEach((option) => {
+    option.addEventListener('click', () => {
+        options.forEach((item) => item.classList.remove('active'));
+        option.classList.add('active');
+        selectedType = option.dataset.type;
+    });
+});
+
 continueButton.addEventListener('click', () => {
-    window.location.href = "/dashboard";
+    window.location.href = selectedType === 'freelancer' ? "/completar-perfil" : "/dashboard";
 });

@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import viewRouter from './backend/routes/viewRouter.js';
 import userRouter from './backend/routes/userRouter.js';
+import freelancerRouter from './backend/routes/freelancer.js';
 import connectDB, { closeDB } from './backend/config/db.js';
 const app = express();
 await connectDB();
@@ -12,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(express.static('public'));
 app.use(express.json());
 app.use("/api/users", userRouter);
+app.use("/api/freelancer-profile", freelancerRouter);
 app.use("/", viewRouter);
 
 const PORT = process.env.PORT;
