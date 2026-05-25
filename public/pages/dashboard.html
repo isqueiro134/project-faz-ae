@@ -1,72 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faz Aí - Dashboard</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <title>Faz Aê - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../controller/dashboardController.js" defer></script>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../js/dashboard.js" type="module"></script>
 </head>
+
 <body>
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-box">FA</div>
+                <span>Faz Aê <small>Cliente</small></span>
+            </div>
+            <nav>
+                <p>Menu Principal</p>
+                <ul>
+                    <li class="active"><i class="fa-solid fa-house"></i> Dashboard</li>
+                    <li><i class="fa-solid fa-briefcase"></i> Publicar Projeto</li>
+                    <li><i class="fa-solid fa-layer-group"></i> Meus Projetos</li>
+                    <li><i class="fa-solid fa-user-group"></i> Freelancers</li>
+                    <li><i class="fa-regular fa-comment"></i> Mensagens</li>
+                </ul>
+            </nav>
+        </aside>
 
-    <aside class="sidebar">
-        <div class="logo">
-            <div class="logo-box">FA</div>
-            <span>Faz Aí <br><small style="font-weight: 400; opacity: 0.6">Cliente</small></span>
-        </div>
-        <nav>
-            <p>Menu Principal</p>
-            <ul>
-                <li class="active"><i class="fa-solid fa-house"></i> Dashboard</li>
-                <li><i class="fa-solid fa-briefcase"></i> Publicar Projeto</li>
-                <li><i class="fa-solid fa-layer-group"></i> Meus Projetos</li>
-                <li><i class="fa-solid fa-user-group"></i> Freelancers</li>
-            </ul>
-        </nav>
-    </aside>
+        <main class="main-content">
+            <header class="header-top">
+                <div>Dashboard / <span class="breadcrumb-muted">Dashboard do Cliente</span></div>
+                <button class="btn-primary" onclick="controller.newProject()">+ Novo Projeto</button>
+            </header>
 
-    <main class="main-content">
-        <header class="header-top">
-            <div>Dashboard / <span style="color: var(--text-dim)">Dashboard do Cliente</span></div>
-            <button class="btn-primary" onclick="controller.newProject()">+ Novo Projeto</button>
-        </header>
+            <div class="dashboard-grid">
+                <div class="main-column">
+                    <section class="card">
+                        <h3 class="card-title">Meus Projetos</h3>
+                        <p class="card-subtitle">Vis&atilde;o geral de todos os seus projetos ativos</p>
 
-        <div class="dashboard-grid">
-            <div class="main-column">
-                <section class="card">
-                    <h3 class="card-title">Meus Projetos</h3>
-                    <p class="card-subtitle">Visão geral de todos os seus projetos ativos</p>
-                    
-                    <div id="project-list">
+                        <div class="project-list" id="project-list"></div>
+                    </section>
+                </div>
+
+                <div class="side-column">
+                    <section class="card">
+                        <h3 class="card-title"><i class="fa-regular fa-comment"></i> Chat</h3>
+                        <div class="chat-box" id="chat-messages">
+                            <div class="bubble received">Ol&aacute;! Enviei a primeira vers&atilde;o do wireframe. Pode olhar? <br><small>14:30</small></div>
+                            <div class="bubble sent">Gostei da estrutura! S&oacute; mude o menu. <br><small>14:45</small></div>
                         </div>
-                </section>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
+                            <button class="btn-primary" onclick="controller.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </section>
+
+                    <section class="card">
+                        <h3 class="card-title">Resumo Financeiro</h3>
+                        <div class="finance-row">
+                            <span class="finance-label">Total Investido</span>
+                            <strong class="finance-value">R$ 5.500</strong>
+                        </div>
+                    </section>
+                </div>
             </div>
-
-            <div class="side-column">
-                <section class="card">
-                    <h3 class="card-title"><i class="fa-regular fa-comment"></i> Chat</h3>
-                    <div class="chat-box" id="chat-messages">
-                        <div class="bubble received">Olá! Enviei a primeira versão do wireframe. Pode olhar? <br><small>14:30</small></div>
-                        <div class="bubble sent">Gostei da estrutura! Só mude o menu. <br><small>14:45</small></div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
-                        <button class="btn-primary" onclick="controller.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </section>
-
-                <section class="card">
-                    <h3 class="card-title">Resumo Financeiro</h3>
-                    <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-                        <span style="color: var(--text-dim)">Total Investido</span>
-                        <strong style="color: var(--accent-green); font-size: 1.2rem;">R$ 5.500</strong>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </main>
-
-    
+        </main>
+    </div>
 </body>
+
 </html>
