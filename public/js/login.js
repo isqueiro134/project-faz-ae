@@ -15,10 +15,12 @@ loginForm.addEventListener('submit', async (event) => {
 
     try {
         const result = await new Auth().login(data);
+        if (!result?.user?.id) {
+            throw new Error("Não foi possível confirmar o login.");
+        }
 
         alert("Login realizado com sucesso!");
         window.location.href = "/onboarding";
-        return result;
     } catch (error) {
         console.error(error);
         alert(error.message);
