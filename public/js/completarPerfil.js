@@ -48,6 +48,27 @@ function getPortfolioItems() {
         .filter((item) => item.title || item.url || item.description);
 }
 
+function hasCompletePortfolioItem() {
+    return [...portfolioList.querySelectorAll('.portfolio-item')].some((item) => {
+        const title = item.querySelector('[name="project_title"]');
+        const category = item.querySelector('[name="project_category"]');
+        const url = item.querySelector('[name="project_url"]');
+        const description = item.querySelector('[name="project_description"]');
+
+        return (
+            title.value.trim().length >= 3 &&
+            category.value.trim().length >= 3 &&
+            url.value.trim() &&
+            url.checkValidity() &&
+            description.value.trim().length >= 80
+        );
+    });
+}
+
+function isValidOptionalUrl(field) {
+    return Boolean(field?.value?.trim() && field.checkValidity());
+}
+
 function collectData(status = 'draft') {
     const data = new FormData(form);
     const user = getUser();
@@ -90,23 +111,43 @@ function collectData(status = 'draft') {
 function calculateStrength() {
     const data = new FormData(form);
     const skills = splitList(data.get('skills') || '');
-    const portfolioItems = getPortfolioItems();
-    const hasLink = Boolean(data.get('linkedin') || data.get('portfolio_url'));
+    const tools = splitList(data.get('tools') || '');
+    const niches = splitList(data.get('niches') || '');
+    const hourlyRate = Number(data.get('hourly_rate')) || 0;
+    const projectRateMin = Number(data.get('project_rate_min')) || 0;
 
     const checks = {
-        identity: Boolean(data.get('professional_title')?.trim().length >= 10 && data.get('category')),
-        skills: skills.length >= 3,
+        identity: Boolean(
+            data.get('professional_title')?.trim().length >= 10 &&
+            data.get('category') &&
+            data.get('level') &&
+            data.get('location')?.trim().length >= 4
+        ),
+        skills: Boolean(skills.length >= 3 && data.get('availability') && data.get('work_model')),
         bio: Boolean(data.get('bio')?.trim().length >= 120),
-        portfolio: portfolioItems.length > 0 || hasLink,
-        pricing: Boolean(data.get('availability') && data.get('pricing_model') && (data.get('hourly_rate') || data.get('project_rate_min'))),
+        portfolio: hasCompletePortfolioItem(),
+        pricing: Boolean(data.get('pricing_model') && (hourlyRate > 0 || projectRateMin > 0)),
+        tools: tools.length >= 2,
+        niches: niches.length >= 1,
+        experience: Boolean(Number(data.get('experience_years')) > 0 && data.get('result_highlight')?.trim().length >= 10),
+        links: isValidOptionalUrl(form.elements.linkedin) || isValidOptionalUrl(form.elements.portfolio_url),
+        response: Boolean(data.get('response_time')),
+        priceRange: hourlyRate > 0 && projectRateMin > 0,
     };
 
-    const total =
-        (checks.identity ? 20 : 0) +
-        (checks.skills ? 20 : 0) +
-        (checks.bio ? 20 : 0) +
-        (checks.portfolio ? 25 : 0) +
-        (checks.pricing ? 15 : 0);
+    const total = Math.min(100,
+        (checks.identity ? 14 : 0) +
+        (checks.skills ? 14 : 0) +
+        (checks.bio ? 14 : 0) +
+        (checks.portfolio ? 14 : 0) +
+        (checks.pricing ? 14 : 0) +
+        (checks.tools ? 5 : 0) +
+        (checks.niches ? 5 : 0) +
+        (checks.experience ? 5 : 0) +
+        (checks.links ? 5 : 0) +
+        (checks.response ? 5 : 0) +
+        (checks.priceRange ? 5 : 0)
+    );
 
     return { checks, total };
 }
@@ -115,7 +156,15 @@ function renderStrength() {
     const { checks, total } = calculateStrength();
     strengthValue.textContent = `${total}%`;
     strengthBar.style.width = `${total}%`;
-    strengthLabel.textContent = total >= 90 ? 'Destaque' : total >= 70 ? 'Competitivo' : total >= 40 ? 'Basico' : 'Incompleto';
+    strengthLabel.textContent = total === 100
+        ? 'Completo'
+        : total >= 90
+            ? 'Destaque, faltam detalhes'
+            : total >= 75
+                ? 'Pronto para uso, ainda incompleto'
+                : total >= 40
+                    ? 'Básico'
+                    : 'Incompleto';
 
     Object.entries(checks).forEach(([key, done]) => {
         document.querySelector(`[data-check="${key}"]`)?.classList.toggle('done', done);
@@ -130,6 +179,132 @@ function renderStep() {
     publishProfile.classList.toggle('hidden', currentStep !== steps.length - 1);
 }
 
+function setInvalid(field, invalid) {
+    if (!field) return;
+    field.classList.toggle('invalid', invalid);
+    field.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+}
+
+function resetStepValidation(stepIndex) {
+    steps[stepIndex].querySelectorAll('.input.invalid').forEach((field) => setInvalid(field, false));
+}
+
+function requireField(field, errors, message) {
+    const rawValue = field?.value || '';
+    const trimmedValue = rawValue.trim();
+    const minLength = Number(field?.getAttribute('minlength')) || 0;
+    const invalid = !trimmedValue || trimmedValue.length < minLength || !field.checkValidity();
+    setInvalid(field, invalid);
+    if (invalid) errors.push({ field, message });
+}
+
+function validateUrl(field, errors, message) {
+    if (!field?.value?.trim()) return;
+    const invalid = !field.checkValidity();
+    setInvalid(field, invalid);
+    if (invalid) errors.push({ field, message });
+}
+
+function validatePortfolio(errors) {
+    const items = [...portfolioList.querySelectorAll('.portfolio-item')];
+    let hasCompleteProject = false;
+
+    items.forEach((item) => {
+        const title = item.querySelector('[name="project_title"]');
+        const category = item.querySelector('[name="project_category"]');
+        const url = item.querySelector('[name="project_url"]');
+        const description = item.querySelector('[name="project_description"]');
+
+        const titleValid = title.value.trim().length >= 3;
+        const categoryValid = category.value.trim().length >= 3;
+        const urlValid = url.value.trim() && url.checkValidity();
+        const descriptionValid = description.value.trim().length >= 80;
+
+        setInvalid(title, !titleValid);
+        setInvalid(category, !categoryValid);
+        setInvalid(url, !urlValid);
+        setInvalid(description, !descriptionValid);
+
+        if (titleValid && categoryValid && urlValid && descriptionValid) {
+            hasCompleteProject = true;
+        }
+    });
+
+    if (!hasCompleteProject) {
+        const firstField = portfolioList.querySelector('.portfolio-item .input');
+        errors.push({
+            field: firstField,
+            message: 'Preencha pelo menos um projeto com título, categoria, link válido e descrição de 80 caracteres.',
+        });
+    }
+}
+
+function validateStep(stepIndex) {
+    const errors = [];
+    const data = new FormData(form);
+    resetStepValidation(stepIndex);
+
+    if (stepIndex === 0) {
+        requireField(form.elements.professional_title, errors, 'Informe um título profissional com pelo menos 10 caracteres.');
+        requireField(form.elements.category, errors, 'Escolha sua área principal.');
+        requireField(form.elements.level, errors, 'Escolha seu nível profissional.');
+        requireField(form.elements.location, errors, 'Informe sua localização ou remoto com pelo menos 4 caracteres.');
+    }
+
+    if (stepIndex === 1) {
+        const skillsInvalid = splitList(data.get('skills') || '').length < 3;
+        setInvalid(form.elements.skills, skillsInvalid);
+        if (skillsInvalid) {
+            errors.push({ field: form.elements.skills, message: 'Adicione pelo menos 3 habilidades separadas por vírgula.' });
+        }
+        requireField(form.elements.availability, errors, 'Informe sua disponibilidade semanal.');
+        requireField(form.elements.work_model, errors, 'Escolha seu modelo de trabalho.');
+    }
+
+    if (stepIndex === 2) {
+        requireField(form.elements.bio, errors, 'Escreva uma biografia com pelo menos 120 caracteres.');
+        validateUrl(form.elements.linkedin, errors, 'Informe um link válido para o LinkedIn.');
+        validateUrl(form.elements.portfolio_url, errors, 'Informe um link válido para o portfolio.');
+    }
+
+    if (stepIndex === 3) {
+        validatePortfolio(errors);
+    }
+
+    if (stepIndex === 4) {
+        requireField(form.elements.pricing_model, errors, 'Escolha um modelo de cobrança.');
+        const hasPrice = Number(form.elements.hourly_rate.value) > 0 || Number(form.elements.project_rate_min.value) > 0;
+        setInvalid(form.elements.hourly_rate, !hasPrice);
+        setInvalid(form.elements.project_rate_min, !hasPrice);
+        if (!hasPrice) {
+            errors.push({ field: form.elements.hourly_rate, message: 'Informe valor por hora ou valor inicial por projeto.' });
+        }
+    }
+
+    if (errors.length) {
+        showMessage(errors[0].message);
+        errors[0].field?.focus();
+        return false;
+    }
+
+    showMessage('');
+    return true;
+}
+
+function canNavigateTo(stepIndex) {
+    if (stepIndex <= currentStep) return true;
+
+    for (let index = 0; index < stepIndex; index += 1) {
+        if (!validateStep(index)) {
+            currentStep = index;
+            renderStep();
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function addPortfolioItem(item = {}) {
     portfolioIndex += 1;
     const suffix = portfolioIndex;
@@ -138,20 +313,20 @@ function addPortfolioItem(item = {}) {
     element.innerHTML = `
         <div class="form-grid">
             <div class="form-group">
-                <label for="projectTitle${suffix}">Titulo do projeto</label>
+                <label for="projectTitle${suffix}">Titulo do projeto *</label>
                 <input id="projectTitle${suffix}" name="project_title" class="input" maxlength="80" placeholder="Ex: Landing page para SaaS" value="${escapeHtml(item.title)}">
             </div>
             <div class="form-group">
-                <label for="projectCategory${suffix}">Categoria</label>
+                <label for="projectCategory${suffix}">Categoria *</label>
                 <input id="projectCategory${suffix}" name="project_category" class="input" placeholder="Ex: Desenvolvimento, Design ou Redacao" value="${escapeHtml(item.category)}">
             </div>
         </div>
         <div class="form-group">
-            <label for="projectUrl${suffix}">Link do projeto</label>
+            <label for="projectUrl${suffix}">Link do projeto *</label>
             <input id="projectUrl${suffix}" name="project_url" class="input" type="url" placeholder="https://..." value="${escapeHtml(item.url)}">
         </div>
         <div class="form-group">
-            <label for="projectDescription${suffix}">Descricao</label>
+            <label for="projectDescription${suffix}">Descricao *</label>
             <textarea id="projectDescription${suffix}" name="project_description" class="input" maxlength="500" rows="4" placeholder="Explique seu papel e o resultado entregue.">${escapeHtml(item.description)}</textarea>
         </div>
     `;
@@ -205,10 +380,13 @@ function showMessage(message, success = false) {
 
 async function submitProfile(event) {
     event.preventDefault();
+
+    if (!validateStep(currentStep)) return;
+
     const profile = collectData('published');
 
     if (!profile.user_id) {
-        showMessage('Faca login novamente para publicar seu perfil.');
+        showMessage('Faça login novamente para publicar seu perfil.');
         return;
     }
 
@@ -227,9 +405,9 @@ async function submitProfile(event) {
         }
 
         localStorage.removeItem(draftKey);
-        showMessage('Perfil publicado. Voce ja pode receber matches melhores.', true);
+        showMessage('Perfil publicado. Você já pode receber matches melhores.', true);
     } catch (error) {
-        showMessage('Nao foi possivel publicar agora. Tente novamente.');
+        showMessage('Não foi possível publicar agora. Tente novamente.');
     }
 }
 
@@ -256,13 +434,16 @@ backStep.addEventListener('click', () => {
 });
 
 nextStep.addEventListener('click', () => {
+    if (!validateStep(currentStep)) return;
     if (currentStep < steps.length - 1) currentStep += 1;
     renderStep();
 });
 
 stepButtons.forEach((button) => {
     button.addEventListener('click', () => {
-        currentStep = Number(button.dataset.stepButton);
+        const targetStep = Number(button.dataset.stepButton);
+        if (!canNavigateTo(targetStep)) return;
+        currentStep = targetStep;
         renderStep();
     });
 });

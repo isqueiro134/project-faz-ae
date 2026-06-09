@@ -7,7 +7,9 @@
   <title>Faz Aê - Completar Perfil</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/completarPerfil.css">
@@ -37,7 +39,8 @@
         <div>
           <span class="eyebrow">Perfil freelancer</span>
           <h1>Complete seu perfil profissional</h1>
-          <p>Quanto melhor seu perfil, melhores ser&atilde;o os matches com projetos de software, design e reda&ccedil;&atilde;o.</p>
+          <p>Quanto melhor seu perfil, melhores serão os matches com projetos de software, design e
+            redação.</p>
         </div>
         <a class="btn-secondary" href="/dashboard">Salvar e sair</a>
       </header>
@@ -47,52 +50,54 @@
           <div class="stepper" aria-label="Etapas do perfil">
             <button type="button" class="step-pill active" data-step-button="0">1. Identidade</button>
             <button type="button" class="step-pill" data-step-button="1">2. Habilidades</button>
-            <button type="button" class="step-pill" data-step-button="2">3. Experi&ecirc;ncia</button>
-            <button type="button" class="step-pill" data-step-button="3">4. Portf&oacute;lio</button>
-            <button type="button" class="step-pill" data-step-button="4">5. Pre&ccedil;os</button>
+            <button type="button" class="step-pill" data-step-button="2">3. Experiência</button>
+            <button type="button" class="step-pill" data-step-button="3">4. Portfólio</button>
+            <button type="button" class="step-pill" data-step-button="4">5. Precificação</button>
           </div>
 
           <section class="profile-step active" data-step="0">
             <h2>Identidade profissional</h2>
-            <p class="step-copy">Comece com informa&ccedil;&otilde;es que ajudam clientes a entenderem seu foco.</p>
+            <p class="step-copy">Comece com informações que ajudam clientes a entenderem seu foco.</p>
             <div class="form-grid">
               <div class="form-group">
-                <label for="professionalTitle">T&iacute;tulo profissional</label>
-                <input id="professionalTitle" name="professional_title" class="input" minlength="10" maxlength="80" placeholder="Ex: Desenvolvedor Front-end React" required>
-                <small>Use uma descri&ccedil;&atilde;o espec&iacute;fica. Evite apenas "Freelancer".</small>
+                <label for="professionalTitle">Título profissional *</label>
+                <input id="professionalTitle" name="professional_title" class="input" minlength="10" maxlength="80"
+                  placeholder="Ex: Desenvolvedor Front-end React" required>
+                <small>Use uma descrição específica. Evite apenas "Freelancer".</small>
               </div>
               <div class="form-group">
-                <label for="category">&Aacute;rea principal</label>
+                <label for="category">Área principal *</label>
                 <select id="category" name="category" class="input" required>
                   <option value="">Selecione</option>
                   <option value="desenvolvimento">Desenvolvimento de Software</option>
                   <option value="design">Design</option>
-                  <option value="redacao">Reda&ccedil;&atilde;o</option>
+                  <option value="redacao">Redação</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="level">N&iacute;vel</label>
-                <select id="level" name="level" class="input">
+                <label for="level">Nível *</label>
+                <select id="level" name="level" class="input" required>
                   <option value="">Selecione</option>
-                  <option value="junior">J&uacute;nior</option>
+                  <option value="junior">Júnior</option>
                   <option value="pleno">Pleno</option>
-                  <option value="senior">S&ecirc;nior</option>
+                  <option value="senior">Sênior</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="location">Localiza&ccedil;&atilde;o</label>
-                <input id="location" name="location" class="input" maxlength="80" placeholder="Ex: S&atilde;o Paulo, SP ou Remoto">
+                <label for="location">Localização *</label>
+                <input id="location" name="location" class="input" minlength="4" maxlength="80"
+                  placeholder="Ex: São Paulo, SP ou Remoto" required>
               </div>
             </div>
           </section>
 
           <section class="profile-step" data-step="1">
             <h2>Especialidades e habilidades</h2>
-            <p class="step-copy">Esses dados alimentam o match com vagas compat&iacute;veis.</p>
+            <p class="step-copy">Esses dados alimentam o match com vagas compatíveis.</p>
             <div class="form-group">
-              <label for="skills">Habilidades principais</label>
+              <label for="skills">Habilidades principais *</label>
               <input id="skills" name="skills" class="input" placeholder="Ex: JavaScript, Node.js, UI Design" required>
-              <small>Adicione pelo menos 3 habilidades separadas por v&iacute;rgula.</small>
+              <small>Adicione pelo menos 3 habilidades separadas por vírgula.</small>
             </div>
             <div class="form-grid">
               <div class="form-group">
@@ -100,24 +105,24 @@
                 <input id="tools" name="tools" class="input" placeholder="Ex: Figma, GitHub, SQLite">
               </div>
               <div class="form-group">
-                <label for="niches">Nichos de atua&ccedil;&atilde;o</label>
+                <label for="niches">Nichos de atuação</label>
                 <input id="niches" name="niches" class="input" placeholder="Ex: SaaS, landing pages, SEO">
               </div>
               <div class="form-group">
-                <label for="availability">Disponibilidade semanal</label>
+                <label for="availability">Disponibilidade semanal *</label>
                 <select id="availability" name="availability" class="input" required>
                   <option value="">Selecione</option>
-                  <option value="ate-10h">At&eacute; 10h por semana</option>
+                  <option value="ate-10h">Até 10h por semana</option>
                   <option value="10-20h">10h a 20h por semana</option>
                   <option value="20-40h">20h a 40h por semana</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="workModel">Modelo de trabalho</label>
-                <select id="workModel" name="work_model" class="input">
+                <label for="workModel">Modelo de trabalho *</label>
+                <select id="workModel" name="work_model" class="input" required>
                   <option value="">Selecione</option>
                   <option value="remoto">Remoto</option>
-                  <option value="hibrido">H&iacute;brido</option>
+                  <option value="hibrido">Híbrido</option>
                   <option value="presencial">Presencial</option>
                 </select>
               </div>
@@ -125,46 +130,52 @@
           </section>
 
           <section class="profile-step" data-step="2">
-            <h2>Experi&ecirc;ncia e bio</h2>
-            <p class="step-copy">Mostre o que voc&ecirc; faz, para quem faz e quais resultados entrega.</p>
+            <h2>Experiência e bio</h2>
+            <p class="step-copy">Mostre o que você faz, para quem faz e quais resultados entrega.</p>
             <div class="form-group">
-              <label for="bio">Resumo profissional</label>
-              <textarea id="bio" name="bio" class="input" minlength="120" maxlength="700" rows="6" placeholder="Ex: Ajudo pequenas empresas a criarem interfaces simples, responsivas e orientadas a convers&atilde;o." required></textarea>
-              <small><span id="bioCount">0</span>/700 caracteres. M&iacute;nimo recomendado: 120.</small>
+              <label for="bio">Resumo profissional *</label>
+              <textarea id="bio" name="bio" class="input" minlength="120" maxlength="700" rows="6"
+                placeholder="Ex: Ajudo pequenas empresas a criarem interfaces simples, responsivas e orientadas a conversão."
+                required></textarea>
+              <small><span id="bioCount">0</span>/700 caracteres. Mínimo recomendado: 120.</small>
             </div>
             <div class="form-grid">
               <div class="form-group">
-                <label for="experienceYears">Anos de experi&ecirc;ncia</label>
-                <input id="experienceYears" name="experience_years" class="input" type="number" min="0" max="50" placeholder="Ex: 3">
+                <label for="experienceYears">Anos de experiência</label>
+                <input id="experienceYears" name="experience_years" class="input" type="number" min="0" max="50"
+                  placeholder="Ex: 3">
               </div>
               <div class="form-group">
                 <label for="resultHighlight">Principal resultado</label>
-                <input id="resultHighlight" name="result_highlight" class="input" maxlength="140" placeholder="Ex: Reduzi o tempo de checkout em 30%">
+                <input id="resultHighlight" name="result_highlight" class="input" maxlength="140"
+                  placeholder="Ex: Reduzi o tempo de checkout em 30%">
               </div>
               <div class="form-group">
                 <label for="linkedin">LinkedIn</label>
-                <input id="linkedin" name="linkedin" class="input" type="url" placeholder="https://linkedin.com/in/seu-perfil">
+                <input id="linkedin" name="linkedin" class="input" type="url"
+                  placeholder="https://linkedin.com/in/seu-perfil">
               </div>
               <div class="form-group">
-                <label for="portfolioUrl">GitHub, Behance ou portf&oacute;lio</label>
-                <input id="portfolioUrl" name="portfolio_url" class="input" type="url" placeholder="https://seuportfolio.com">
+                <label for="portfolioUrl">GitHub, Behance ou portfólio</label>
+                <input id="portfolioUrl" name="portfolio_url" class="input" type="url"
+                  placeholder="https://seuportfolio.com">
               </div>
             </div>
           </section>
 
           <section class="profile-step" data-step="3">
-            <h2>Portf&oacute;lio</h2>
-            <p class="step-copy">Um projeto bem descrito j&aacute; ajuda clientes a confiarem no seu trabalho.</p>
+            <h2>Portfólio</h2>
+            <p class="step-copy">Um projeto bem descrito já ajuda clientes a confiarem no seu trabalho.</p>
             <div class="portfolio-list" id="portfolioList"></div>
             <button type="button" class="btn-secondary" id="addProject">+ Adicionar projeto</button>
           </section>
 
           <section class="profile-step" data-step="4">
-            <h2>Precifica&ccedil;&atilde;o e prefer&ecirc;ncias</h2>
-            <p class="step-copy">Informe uma faixa realista. Voc&ecirc; poder&aacute; alterar depois.</p>
+            <h2>Precificação e preferências</h2>
+            <p class="step-copy">Informe uma faixa realista. Você poderá alterar depois.</p>
             <div class="form-grid">
               <div class="form-group">
-                <label for="pricingModel">Modelo de cobran&ccedil;a</label>
+                <label for="pricingModel">Modelo de cobrança *</label>
                 <select id="pricingModel" name="pricing_model" class="input" required>
                   <option value="">Selecione</option>
                   <option value="hourly">Por hora</option>
@@ -173,20 +184,21 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="hourlyRate">Valor por hora</label>
+                <label for="hourlyRate">Valor por hora *</label>
                 <input id="hourlyRate" name="hourly_rate" class="input" type="number" min="1" placeholder="Ex: 80">
               </div>
               <div class="form-group">
-                <label for="projectRateMin">Projeto a partir de</label>
-                <input id="projectRateMin" name="project_rate_min" class="input" type="number" min="1" placeholder="Ex: 1200">
+                <label for="projectRateMin">Projeto a partir de *</label>
+                <input id="projectRateMin" name="project_rate_min" class="input" type="number" min="1"
+                  placeholder="Ex: 1200">
               </div>
               <div class="form-group">
-                <label for="responseTime">Prazo m&eacute;dio de resposta</label>
+                <label for="responseTime">Prazo médio de resposta</label>
                 <select id="responseTime" name="response_time" class="input">
                   <option value="">Selecione</option>
-                  <option value="ate-2h">At&eacute; 2h</option>
+                  <option value="ate-2h">Até 2h</option>
                   <option value="mesmo-dia">No mesmo dia</option>
-                  <option value="24h">At&eacute; 24h</option>
+                  <option value="24h">Até 24h</option>
                 </select>
               </div>
             </div>
@@ -205,8 +217,8 @@
           </div>
         </form>
 
-        <aside class="strength-card card" aria-label="For&ccedil;a do perfil">
-          <span class="eyebrow">For&ccedil;a do perfil</span>
+        <aside class="strength-card card" aria-label="Força do perfil">
+          <span class="eyebrow">Força do perfil</span>
           <strong id="strengthValue">0%</strong>
           <div class="progress-container">
             <div class="progress-fill" id="strengthBar"></div>
@@ -214,10 +226,16 @@
           <p id="strengthLabel">Incompleto</p>
           <ul class="profile-checklist">
             <li data-check="identity">Identidade profissional</li>
-            <li data-check="skills">3 habilidades</li>
+            <li data-check="skills">Habilidades e disponibilidade</li>
             <li data-check="bio">Bio com qualidade</li>
-            <li data-check="portfolio">Portf&oacute;lio ou link</li>
-            <li data-check="pricing">Pre&ccedil;os e disponibilidade</li>
+            <li data-check="portfolio">Projeto de portfólio completo</li>
+            <li data-check="pricing">Precificação mínima</li>
+            <li data-check="tools">Ferramentas e tecnologias</li>
+            <li data-check="niches">Nicho de atuação</li>
+            <li data-check="experience">Experiência e resultado</li>
+            <li data-check="links">Link profissional válido</li>
+            <li data-check="response">Prazo de resposta</li>
+            <li data-check="priceRange">Valor por hora e projeto preenchidos</li>
           </ul>
         </aside>
       </div>

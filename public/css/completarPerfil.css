@@ -221,6 +221,11 @@ textarea.input {
   color: var(--color-primary-hover);
 }
 
+.input.invalid {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 0.3rem rgba(239, 68, 68, 0.12);
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
