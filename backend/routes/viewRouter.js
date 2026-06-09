@@ -25,6 +25,10 @@ router.get('/onboarding', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/onboarding.html'));
 });
 
+router.get('/completar-perfil', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '../../public/pages/completarPerfil.html'));
+});
+
 router.get('/dashboard', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/dashboard.html'));
 });
