@@ -11,7 +11,7 @@ let connectionPromise = null;
 
 async function openConnection() {
   const db = await open({
-    filename: './banco.db',
+    filename: process.env.SQLITE_DB_PATH || './banco.db',
     driver: sqlite3.Database,
   });
 

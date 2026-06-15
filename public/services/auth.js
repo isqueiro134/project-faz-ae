@@ -15,11 +15,13 @@ class Auth {
                 const result = await response.json();
                 localStorage.setItem('fazAeUser', JSON.stringify(result.user));
                 return result;
-            } else {
-                throw new Error("Nao foi possivel criar sua conta.");
             }
+
+            const result = await response.json().catch(() => null);
+            throw new Error(result?.message || "Não foi possível criar sua conta.");
         } catch (error) {
-            console.error("Erro na requisicao", error);
+            console.error("Erro na requisição", error);
+            throw error;
         }
     }
 
@@ -37,11 +39,13 @@ class Auth {
                 const result = await response.json();
                 localStorage.setItem('fazAeUser', JSON.stringify(result.user));
                 return result;
-            } else {
-                throw new Error("Email ou senha invalidos.");
             }
+
+            const result = await response.json().catch(() => null);
+            throw new Error(result?.message || "Email ou senha inválidos.");
         } catch (error) {
-            console.error("Erro na requisicao", error);
+            console.error("Erro na requisição", error);
+            throw error;
         }
     }
 

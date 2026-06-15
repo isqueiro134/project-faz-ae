@@ -4,7 +4,8 @@ const options = document.querySelectorAll('.option');
 let selectedType = 'freelancer';
 
 const user = JSON.parse(localStorage.getItem('fazAeUser') || 'null');
-nomeUsuario.textContent = user?.full_name || 'profissional';
+const firstName = user?.full_name.split(' ')[0];
+nomeUsuario.textContent = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase() || 'profissional';
 document.querySelector('[data-type="freelancer"]')?.classList.add('active');
 
 options.forEach((option) => {

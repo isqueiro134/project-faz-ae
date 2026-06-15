@@ -8,9 +8,9 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await new AuthRepository().signIn(email, password);
-        res.status(200).send(result);
+        res.status(200).json(result);
     } catch (error) {
-        res.status(404).send(`User not found: ${error}`);
+        res.status(401).json({ message: error.message });
     }
 })
 
@@ -28,9 +28,9 @@ router
         const { email, password, metadata } = req.body;
         try {
             const result = await new AuthRepository().register(email, password, metadata);
-            res.status(201).send(result);
+            res.status(201).json(result);
         } catch (error) {
-            res.status(404).send(`User not found: ${error}`);
+            res.status(400).json({ message: error.message });
         }
     })
 
