@@ -1,0 +1,138 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-5);
+  background:
+    radial-gradient(circle at top, rgba(22, 163, 74, 0.12), transparent 30rem),
+    var(--color-page);
+}
+
+.container {
+  width: min(100%, 38rem);
+  text-align: center;
+}
+
+.logo {
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  color: var(--color-text);
+  font-size: 2.2rem;
+}
+
+.card {
+  padding: var(--space-8);
+  text-align: left;
+}
+
+.card h2 {
+  margin-bottom: var(--space-1);
+  color: var(--color-text);
+  font-size: 2rem;
+}
+
+.card p {
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .input {
+  padding-right: 6rem;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  padding: var(--space-2);
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: var(--color-primary);
+}
+
+.btn {
+  width: 100%;
+}
+
+.form-msg {
+  display: none;
+  margin-bottom: var(--space-4);
+  font-size: 1.2rem;
+}
+
+.form-msg.show {
+  display: block;
+}
+
+.form-msg.error {
+  color: var(--color-error);
+}
+
+.form-msg.success {
+  color: var(--color-primary);
+}
+
+.links {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.links a,
+.footer a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.links a:hover,
+.footer a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.footer {
+  margin-top: var(--space-6);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 42rem) {
+  body {
+    align-items: flex-start;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .logo {
+    margin-bottom: var(--space-5);
+  }
+
+  .card {
+    padding: var(--space-6);
+  }
+}

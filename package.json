@@ -1,0 +1,27 @@
+{
+  "name": "projeto-faz-ae",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "node --watch app.js",
+    "client": "vite",
+    "dev": "npm run server & npm run client"
+  },
+  "keywords": [],
+  "author": "Isaque Oliveira, Enzo Miashita, Pedro Gama e Ícaro Alexandre",
+  "license": "ISC",
+  "type": "module",
+  "description": "Projeto de Marketplace de Serviços de Freelance utilizando HTML, CSS, JavaScript e Node.js + Express",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1",
+    "url": "^0.11.4"
+  },
+  "devDependencies": {
+    "vite": "^8.0.14"
+  }
+}

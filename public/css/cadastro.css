@@ -1,0 +1,141 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-5);
+  background:
+    radial-gradient(circle at top right, rgba(22, 163, 74, 0.12), transparent 32rem),
+    var(--color-page);
+}
+
+.container {
+  width: min(100%, 42rem);
+}
+
+.logo {
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  color: var(--color-text);
+  font-size: 2.2rem;
+}
+
+.card {
+  padding: var(--space-8);
+}
+
+.card h2 {
+  margin-bottom: var(--space-1);
+  color: var(--color-text);
+  font-size: 2rem;
+}
+
+.card p {
+  margin-bottom: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .input {
+  padding-right: 6rem;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  padding: var(--space-2);
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: var(--color-primary);
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: var(--space-5) 0;
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.checkbox-wrapper input {
+  width: 1.6rem;
+  min-height: 1.6rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary);
+}
+
+.btn {
+  width: 100%;
+}
+
+.footer-link {
+  margin-top: var(--space-5);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.footer-link a,
+.checkbox-wrapper a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.footer-link a:hover,
+.checkbox-wrapper a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.error-msg {
+  display: none;
+  margin-top: var(--space-2);
+  color: var(--color-error);
+  font-size: 1.2rem;
+}
+
+.input.invalid {
+  border-color: var(--color-error);
+}
+
+@media (max-width: 42rem) {
+  body {
+    align-items: flex-start;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .logo {
+    margin-bottom: var(--space-5);
+  }
+
+  .card {
+    padding: var(--space-6);
+  }
+
+  .checkbox-wrapper {
+    gap: var(--space-2);
+  }
+}
