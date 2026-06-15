@@ -72,6 +72,24 @@ body {
   width: 100%;
 }
 
+.form-msg {
+  display: none;
+  margin-bottom: var(--space-4);
+  font-size: 1.2rem;
+}
+
+.form-msg.show {
+  display: block;
+}
+
+.form-msg.error {
+  color: var(--color-error);
+}
+
+.form-msg.success {
+  color: var(--color-primary);
+}
+
 .links {
   display: grid;
   gap: var(--space-2);

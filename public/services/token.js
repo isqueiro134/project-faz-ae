@@ -1,23 +1,13 @@
+// O token de sessão fica em cookie HttpOnly (inacessível ao JS).
+// A verificação é feita no servidor via /api/auth/me.
+
+/** Retorna true se houver sessão válida. */
 export default async function autenticacao() {
     try {
-        const meuToken = getCookie('token');
-        const response = await fetch('/autenticacao-usuario', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token: meuToken })
-        })
-
-        if (response.ok) {
-            const result = await response.json();
-            return true;
-        } else {
-            console.error("Erro no servidor", response.status);
-            return false;
-        }
+        const response = await fetch('/api/auth/me');
+        return response.ok;
     } catch (error) {
-        console.error("Erro na requisicao", erro);
+        console.error('Erro ao verificar sessão', error);
         return false;
     }
 }

@@ -1,10 +1,18 @@
 import { randomUUID, randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import connectDB from '../config/db.js';
+import { isValidCpf, normalizeCpf } from '../utils/cpf.js';
 
 const db = await connectDB();
 
 const SALT_BYTES = 16;
 const KEY_BYTES = 64;
+
+/** Erro com status HTTP para o router mapear na resposta. */
+function httpError(message, status) {
+    const error = new Error(message);
+    error.status = status;
+    return error;
+}
 
 function hashPassword(plain) {
     const salt = randomBytes(SALT_BYTES);
@@ -40,11 +48,15 @@ class AuthRepository {
      * @param {string} password
      * @param {object} [metadata] — ex.: { full_name: "Nome" }
      */
-    async register(email, password, metadata = {}) {
+    async register(email, password, metadata = {}, cpf = null) {
         const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
         if (!normalizedEmail || !password) {
-            throw new Error('Email e senha são obrigatórios.');
+            throw httpError('Email e senha são obrigatórios.', 400);
         }
+
+        const normalizedCpf = normalizeCpf(cpf);
+        if (!normalizedCpf) throw httpError('CPF é obrigatório.', 400);
+        if (!isValidCpf(normalizedCpf)) throw httpError('CPF inválido.', 400);
 
         const fullName = resolveFullName(metadata) ?? normalizedEmail.split('@')[0] ?? 'Usuário';
         const userId = randomUUID();
@@ -53,16 +65,20 @@ class AuthRepository {
         await db.exec('BEGIN IMMEDIATE');
         try {
             await db.run(
-                `INSERT INTO users (id, full_name, email, password_hash)
-                 VALUES (?, ?, ?, ?)`,
-                [userId, fullName, normalizedEmail, passwordHash],
+                `INSERT INTO users (id, full_name, email, cpf, password_hash)
+                 VALUES (?, ?, ?, ?, ?)`,
+                [userId, fullName, normalizedEmail, normalizedCpf, passwordHash],
             );
             await db.run(`INSERT INTO profiles (id) VALUES (?)`, [userId]);
             await db.exec('COMMIT');
         } catch (err) {
             await db.exec('ROLLBACK').catch(() => {});
-            if (err && String(err.message).includes('UNIQUE')) {
-                throw new Error('Este email já está cadastrado.');
+            const message = String(err && err.message);
+            if (message.includes('UNIQUE') && message.includes('cpf')) {
+                throw httpError('Este CPF já está cadastrado.', 409);
+            }
+            if (message.includes('UNIQUE')) {
+                throw httpError('Este email já está cadastrado.', 409);
             }
             throw err;
         }
@@ -80,7 +96,7 @@ class AuthRepository {
     async signIn(email, password) {
         const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
         if (!normalizedEmail || !password) {
-            throw new Error('Email e senha são obrigatórios.');
+            throw httpError('Email e senha são obrigatórios.', 400);
         }
 
         const row = await db.get(
@@ -89,7 +105,7 @@ class AuthRepository {
         );
 
         if (!row || !verifyPassword(password, row.password_hash)) {
-            throw new Error('Email ou senha inválidos.');
+            throw httpError('Email ou senha inválidos.', 401);
         }
 
         return {
@@ -106,10 +122,6 @@ class AuthRepository {
      * Sem sessão server-side persistente; encerramento é tratado no cliente (limpar token/cookie).
      */
     async signOut() {}
-
-        if (error) {
-            throw new Error(`[${error.status}]: ${error.message}`);
-        }
 
     /**
      * Sem JWT armazenado no servidor; use middleware futuro ou retorne null até haver sessão.

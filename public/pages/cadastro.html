@@ -37,6 +37,13 @@
         </div>
 
         <div class="form-group">
+          <label for="cpf" class="label">CPF</label>
+          <input id="cpf" name="cpf" class="input" type="text" inputmode="numeric" placeholder="000.000.000-00"
+            required maxlength="14" autocomplete="off" />
+          <span id="errorCpf" class="error-msg">CPF inválido.</span>
+        </div>
+
+        <div class="form-group">
           <label for="password" class="label">Senha</label>
           <div class="password-wrapper">
             <input id="password" name="password" class="input" type="password" placeholder="Mínimo 8 caracteres"

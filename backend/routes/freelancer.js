@@ -1,5 +1,6 @@
 import express from 'express';
 import FreelancerProfileRepository from '../Repository/FreelancerProfileRepository.js';
+import { requireApiAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -22,8 +23,9 @@ function validateProfile(data) {
     return errors;
 }
 
-router.post('/', async (req, res) => {
-    const data = req.body;
+router.post('/', requireApiAuth, async (req, res) => {
+    // user_id vem da sessão (cookie), nunca do corpo enviado pelo cliente.
+    const data = { ...req.body, user_id: req.user.id };
     const errors = data.status === 'published' ? validateProfile(data) : {};
 
     if (Object.keys(errors).length) {

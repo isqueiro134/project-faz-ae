@@ -11,15 +11,39 @@ let connectionPromise = null;
 
 async function openConnection() {
   const db = await open({
-    filename: process.env.SQLITE_DB_PATH || './banco.db',
+    filename: './banco.db',
     driver: sqlite3.Database,
   });
 
   await db.run('PRAGMA foreign_keys = ON');
   await db.run('PRAGMA journal_mode = WAL');
 
+  await runMigrations(db);
+
   console.log('---> ✓ Conectado ao SQLite <---');
   return db;
+}
+
+/**
+ * Migrações idempotentes para bancos já existentes.
+ * `schema.sql` cobre instalações novas; aqui ajustamos bancos antigos.
+ */
+async function runMigrations(db) {
+  const columns = await db.all('PRAGMA table_info(users)');
+  if (!columns.some((column) => column.name === 'cpf')) {
+    await db.run('ALTER TABLE users ADD COLUMN cpf TEXT');
+  }
+  await db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_users_cpf ON users(cpf)');
+
+  await db.run(`CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY NOT NULL,
+    user_id TEXT NOT NULL,
+    token TEXT UNIQUE NOT NULL,
+    expires_at TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`);
+  await db.run('CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token)');
 }
 
 /**

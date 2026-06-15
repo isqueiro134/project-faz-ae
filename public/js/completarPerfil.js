@@ -1,3 +1,9 @@
+import FreelancerProfile from '../services/freelancerProfile.js';
+import Auth from '../services/auth.js';
+
+// Usuário autenticado vem da sessão (cookie); fallback p/ localStorage.
+let sessionUser = JSON.parse(localStorage.getItem('fazAeUser') || 'null');
+
 const form = document.getElementById('profileForm');
 const steps = [...document.querySelectorAll('.profile-step')];
 const stepButtons = [...document.querySelectorAll('[data-step-button]')];
@@ -34,7 +40,7 @@ function splitList(value) {
 }
 
 function getUser() {
-    return JSON.parse(localStorage.getItem('fazAeUser') || 'null');
+    return sessionUser;
 }
 
 function getPortfolioItems() {
@@ -391,25 +397,17 @@ async function submitProfile(event) {
     }
 
     try {
-        const response = await fetch('/api/freelancer-profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(profile),
-        });
-        const result = await response.json();
-
-        if (!response.ok) {
-            const firstError = Object.values(result.errors || {})[0] || result.message || 'Revise os campos destacados.';
-            showMessage(firstError);
-            return;
-        }
-
+        await new FreelancerProfile().save(profile);
         localStorage.removeItem(draftKey);
         showMessage('Perfil publicado. Você já pode receber matches melhores.', true);
     } catch (error) {
-        showMessage('Não foi possível publicar agora. Tente novamente.');
+        const firstError = error.errors ? Object.values(error.errors)[0] : error.message;
+        showMessage(firstError || 'Não foi possível publicar agora. Tente novamente.');
     }
 }
+
+sessionUser = (await new Auth().me()) || sessionUser;
+if (sessionUser) localStorage.setItem('fazAeUser', JSON.stringify(sessionUser));
 
 loadDraft();
 renderStep();

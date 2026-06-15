@@ -1,22 +1,30 @@
-document.querySelector("#recuperarSenhaBT").addEventListener('click', async (event) => {
+import Auth from '../services/auth.js';
 
-    const user = document.querySelector("#usuario").value;
+const botao = document.querySelector('#recuperarSenhaBT');
+const campo = document.querySelector('#usuario');
+const msg = document.querySelector('#recuperarMsg');
 
-    try {
-        const response = await fetch('/recuperar-senha', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
+function showMsg(text, type = 'error') {
+    msg.textContent = text;
+    msg.className = `recuperar-msg show ${type}`;
+}
 
-        if (response.ok) {
-            const result = await response.json();
-        } else {
-            console.error("Erro no servidor", response.status);
-        }
-    } catch (error) {
-        console.error("Erro na requisicao", erro);
+botao.addEventListener('click', async () => {
+    const identifier = campo.value.trim();
+
+    if (!identifier) {
+        showMsg('Informe seu email ou CPF.');
+        campo.focus();
+        return;
     }
-})
+
+    botao.disabled = true;
+    try {
+        const result = await new Auth().recoverPassword(identifier);
+        showMsg(result.message, 'success');
+    } catch (error) {
+        showMsg(error.message);
+    } finally {
+        botao.disabled = false;
+    }
+});

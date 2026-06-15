@@ -1,17 +1,35 @@
 import express from 'express';
 import UserRepository from '../Repository/UserRepository.js';
 import AuthRepository from '../Repository/AuthRepository.js';
+import SessionRepository from '../Repository/SessionRepository.js';
+import { setSessionCookie } from '../utils/cookies.js';
 
 const router = express.Router();
+
+/** Cria a sessão, seta o cookie e devolve o resultado com a sessão. */
+async function startSession(res, result) {
+    const session = await new SessionRepository().create(result.user.id);
+    setSessionCookie(res, session.token);
+    return { ...result, session: { expires_at: session.expiresAt } };
+}
 
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await new AuthRepository().signIn(email, password);
-        res.status(200).json(result);
+        res.status(200).json(await startSession(res, result));
     } catch (error) {
-        res.status(401).json({ message: error.message });
+        res.status(error.status || 401).json({ message: error.message });
     }
+})
+
+// MVP: não envia e-mail real. Resposta genérica para não revelar quais contas existem.
+router.post("/recover-password", (req, res) => {
+    const { identifier } = req.body;
+    if (!identifier || !String(identifier).trim()) {
+        return res.status(400).json({ message: 'Informe seu email ou CPF.' });
+    }
+    res.status(200).json({ message: 'Se a conta existir, enviaremos instruções de recuperação.' });
 })
 
 router
@@ -19,30 +37,31 @@ router
     .get(async (req, res) => {
         try {
             const results = await new UserRepository().getAll();
-            res.status(200).send(results);
+            res.status(200).json(results);
         } catch (error) {
-            res.status(404).send(`User not found: ${error}`);
+            res.status(500).json({ message: error.message });
         }
     })
     .post(async (req, res) => {
-        const { email, password, metadata } = req.body;
+        const { email, password, metadata, cpf } = req.body;
         try {
-            const result = await new AuthRepository().register(email, password, metadata);
-            res.status(201).json(result);
+            const result = await new AuthRepository().register(email, password, metadata, cpf);
+            res.status(201).json(await startSession(res, result));
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(error.status || 500).json({ message: error.message });
         }
     })
 
 router
     .route("/:id")
     .get(async (req, res) => {
-        const { id } = req.body;
+        const { id } = req.params;
         try {
             const result = await new UserRepository().getById(id);
-            res.status(200).send(result);
+            if (!result) return res.status(404).json({ message: 'Usuário não encontrado.' });
+            res.status(200).json(result);
         } catch (error) {
-            res.status(404).send(`User not found: ${error}`);
+            res.status(500).json({ message: error.message });
         }
     })
 

@@ -17,7 +17,7 @@ class UserRepository extends BaseRepository {
 
     async getAll() {
         try {
-            const results = await super.getAll('users', ['full_name', 'email']);
+            const results = await super.getAll('users', ['id', 'full_name', 'email', 'created_at']);
             return results;
         } catch (error) {
             console.error(`✗ Error getting all users: ${error.message}`);
@@ -27,7 +27,7 @@ class UserRepository extends BaseRepository {
 
     async getById(id) {
         try {
-            const result = await super.getById('users', ['full_name', 'email'], id);
+            const result = await super.getById('users', ['id', 'full_name', 'email'], id);
             return result;
         } catch (error) {
             console.error(`✗ Error getting user by id ${id}: ${error.message}`);

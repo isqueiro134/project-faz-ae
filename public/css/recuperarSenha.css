@@ -47,6 +47,23 @@ body {
   margin-top: var(--space-2);
 }
 
+.recuperar-msg {
+  display: none;
+  font-size: 1.3rem;
+}
+
+.recuperar-msg.show {
+  display: block;
+}
+
+.recuperar-msg.error {
+  color: var(--color-error);
+}
+
+.recuperar-msg.success {
+  color: var(--color-primary);
+}
+
 .voltar,
 .ajuda {
   text-align: center;

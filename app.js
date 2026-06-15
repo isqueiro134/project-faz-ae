@@ -4,15 +4,38 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import viewRouter from './backend/routes/viewRouter.js';
 import userRouter from './backend/routes/userRouter.js';
+import authRouter from './backend/routes/authRouter.js';
 import freelancerRouter from './backend/routes/freelancer.js';
 import connectDB, { closeDB } from './backend/config/db.js';
 const app = express();
 await connectDB();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Mapeia arquivos HTML para suas rotas "bonitas" (que aplicam autenticação).
+const PAGE_ROUTES = {
+    'home.html': '/',
+    'index.html': '/',
+    'login.html': '/login',
+    'cadastro.html': '/cadastro',
+    'recuperarSenha.html': '/recuperar-senha',
+    'onboarding.html': '/onboarding',
+    'completarPerfil.html': '/completar-perfil',
+    'dashboard.html': '/dashboard',
+};
+
+// Impede acesso direto a /pages/*.html (e /index.html), forçando o uso das rotas protegidas.
+app.use((req, res, next) => {
+    const match = req.path.match(/\/([^/]+\.html)$/i);
+    if (match && PAGE_ROUTES[match[1]]) {
+        return res.redirect(PAGE_ROUTES[match[1]]);
+    }
+    next();
+});
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/freelancer-profile", freelancerRouter);
 app.use("/", viewRouter);
 

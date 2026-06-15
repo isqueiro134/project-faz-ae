@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node _test.mjs)",
+      "PowerShell(Stop-Process *)",
+      "PowerShell($p = Start-Process node -ArgumentList 'app.js' -PassThru -RedirectStandardOutput server_out.log -RedirectStandardError server_err.log; Start-Sleep -Seconds 3; \"PID=$\\($p.Id\\)\"; \"--- stderr ---\"; Get-Content server_err.log -ErrorAction SilentlyContinue)",
+      "PowerShell(node _e2e.mjs)"
+    ]
+  }
+}
