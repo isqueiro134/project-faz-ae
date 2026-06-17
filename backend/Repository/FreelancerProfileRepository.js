@@ -26,7 +26,20 @@ const profileColumns = {
     urgent_projects: 'INTEGER NOT NULL DEFAULT 0',
     profile_strength: 'INTEGER NOT NULL DEFAULT 0',
     status: "TEXT NOT NULL DEFAULT 'draft'",
+    rating_average: 'REAL DEFAULT 0.0',
+    total_reviews: 'INTEGER DEFAULT 0',
+    completed_jobs: 'INTEGER DEFAULT 0',
 };
+
+function parseJson(value, fallback) {
+    if (!value) return fallback;
+
+    try {
+        return JSON.parse(value);
+    } catch (_) {
+        return fallback;
+    }
+}
 
 class FreelancerProfileRepository {
     async ensureColumns() {
@@ -99,6 +112,46 @@ class FreelancerProfileRepository {
         }
 
         return { user_id: userId, status: values.status, profile_strength: values.profile_strength };
+    }
+
+    async listPublished() {
+        await this.ensureColumns();
+
+        const rows = await db.all(
+            `SELECT
+                fp.id,
+                fp.user_id,
+                u.full_name,
+                p.avatar_url,
+                p.bio,
+                fp.professional_title,
+                fp.category,
+                fp.skills,
+                fp.location,
+                fp.hourly_rate,
+                fp.pricing_model,
+                fp.project_rate_min,
+                fp.project_rate_max,
+                fp.rating_average,
+                fp.total_reviews,
+                fp.completed_jobs,
+                fp.availability,
+                fp.response_time,
+                fp.portfolio_items,
+                fp.links
+            FROM freelancer_profiles fp
+            INNER JOIN users u ON u.id = fp.user_id
+            INNER JOIN profiles p ON p.id = fp.user_id
+            WHERE fp.status = 'published'
+            ORDER BY fp.rating_average DESC, fp.completed_jobs DESC, u.full_name ASC`,
+        );
+
+        return rows.map((row) => ({
+            ...row,
+            skills: parseJson(row.skills, []),
+            portfolio_items: parseJson(row.portfolio_items, []),
+            links: parseJson(row.links, {}),
+        }));
     }
 
     mapValues(data) {

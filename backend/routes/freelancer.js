@@ -1,5 +1,6 @@
 import express from 'express';
 import FreelancerProfileRepository from '../Repository/FreelancerProfileRepository.js';
+import ProfileRepository from '../Repository/ProfileRepository.js';
 import { requireApiAuth } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -22,6 +23,20 @@ function validateProfile(data) {
 
     return errors;
 }
+
+router.get('/', requireApiAuth, async (req, res) => {
+    try {
+        const context = await new ProfileRepository().getContext(req.user);
+        if (context.profile_type !== 'client') {
+            return res.status(403).json({ message: 'Ambiente incompativel.' });
+        }
+
+        const freelancers = await new FreelancerProfileRepository().listPublished();
+        return res.status(200).json({ freelancers });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
 
 router.post('/', requireApiAuth, async (req, res) => {
     // user_id vem da sessão (cookie), nunca do corpo enviado pelo cliente.

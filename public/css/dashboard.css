@@ -60,6 +60,13 @@ nav li {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+nav li a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
 nav li i {
   width: 1.8rem;
   color: currentColor;
