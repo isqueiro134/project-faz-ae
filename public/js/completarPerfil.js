@@ -2,7 +2,21 @@ import FreelancerProfile from '../services/freelancerProfile.js';
 import Auth from '../services/auth.js';
 
 // Usuário autenticado vem da sessão (cookie); fallback p/ localStorage.
-let sessionUser = JSON.parse(localStorage.getItem('fazAeUser') || 'null');
+let sessionUser = null;
+const auth = new Auth();
+const context = await auth.context();
+
+if (!context) {
+    window.location.href = '/login';
+    throw new Error('Nao autenticado.');
+}
+
+if (context.profile_type !== 'freelancer') {
+    window.location.href = context.redirect_to || '/onboarding';
+    throw new Error('Ambiente incompativel.');
+}
+
+sessionUser = context.user;
 
 const form = document.getElementById('profileForm');
 const steps = [...document.querySelectorAll('.profile-step')];
@@ -405,9 +419,6 @@ async function submitProfile(event) {
         showMessage(firstError || 'Não foi possível publicar agora. Tente novamente.');
     }
 }
-
-sessionUser = (await new Auth().me()) || sessionUser;
-if (sessionUser) localStorage.setItem('fazAeUser', JSON.stringify(sessionUser));
 
 loadDraft();
 renderStep();

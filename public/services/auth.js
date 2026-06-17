@@ -31,6 +31,26 @@ class Auth {
         return result;
     }
 
+    async context() {
+        const response = await fetch('/api/auth/context');
+        if (!response.ok) return null;
+        return response.json().catch(() => null);
+    }
+
+    async selectProfile(profileType) {
+        const response = await fetch('/api/profiles/select', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profile_type: profileType }),
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(result.message || 'Nao foi possivel selecionar o perfil.');
+        }
+        return result;
+    }
+
     async getById(id) {
         const response = await fetch(`/api/users/${id}`);
         const result = await response.json().catch(() => ({}));

@@ -6,6 +6,7 @@ import viewRouter from './backend/routes/viewRouter.js';
 import userRouter from './backend/routes/userRouter.js';
 import authRouter from './backend/routes/authRouter.js';
 import freelancerRouter from './backend/routes/freelancer.js';
+import profileRouter from './backend/routes/profileRouter.js';
 import connectDB, { closeDB } from './backend/config/db.js';
 const app = express();
 await connectDB();
@@ -21,6 +22,8 @@ const PAGE_ROUTES = {
     'onboarding.html': '/onboarding',
     'completarPerfil.html': '/completar-perfil',
     'dashboard.html': '/dashboard',
+    'dashboardCliente.html': '/dashboard-cliente',
+    'dashboardFreelancer.html': '/dashboard-freelancer',
 };
 
 // Impede acesso direto a /pages/*.html (e /index.html), forçando o uso das rotas protegidas.
@@ -36,6 +39,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/profiles", profileRouter);
 app.use("/api/freelancer-profile", freelancerRouter);
 app.use("/", viewRouter);
 

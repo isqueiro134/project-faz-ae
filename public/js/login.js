@@ -29,8 +29,8 @@ loginForm.addEventListener('submit', async (event) => {
 
     submitBtn.disabled = true;
     try {
-        await new Auth().login(data);
-        window.location.href = '/onboarding';
+        const result = await new Auth().login(data);
+        window.location.href = result.redirect_to || '/onboarding';
     } catch (error) {
         showMsg(error.message);
     } finally {

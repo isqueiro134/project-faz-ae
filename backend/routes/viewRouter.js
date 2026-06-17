@@ -2,6 +2,7 @@ import { Router } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { requirePageAuth } from '../middleware/auth.js';
+import ProfileRepository from '../Repository/ProfileRepository.js';
 
 const router = Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -22,16 +23,32 @@ router.get('/recuperar-senha', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/recuperarSenha.html'));
 });
 
-router.get('/onboarding', requirePageAuth, (req, res) => {
+router.get('/onboarding', requirePageAuth, async (req, res) => {
+    const context = await new ProfileRepository().getContext(req.user);
+    if (context.has_profile) return res.redirect(context.redirect_to);
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/onboarding.html'));
 });
 
-router.get('/completar-perfil', requirePageAuth, (req, res) => {
+router.get('/completar-perfil', requirePageAuth, async (req, res) => {
+    const context = await new ProfileRepository().getContext(req.user);
+    if (context.profile_type !== 'freelancer') return res.redirect(context.redirect_to);
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/completarPerfil.html'));
 });
 
 router.get('/dashboard', requirePageAuth, (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, '../../public/pages/dashboard.html'));
+    res.redirect('/dashboard-cliente');
+});
+
+router.get('/dashboard-cliente', requirePageAuth, async (req, res) => {
+    const context = await new ProfileRepository().getContext(req.user);
+    if (context.profile_type !== 'client') return res.redirect(context.redirect_to);
+    res.status(200).sendFile(path.join(__dirname, '../../public/pages/dashboardCliente.html'));
+});
+
+router.get('/dashboard-freelancer', requirePageAuth, async (req, res) => {
+    const context = await new ProfileRepository().getContext(req.user);
+    if (context.profile_type !== 'freelancer') return res.redirect(context.redirect_to);
+    res.status(200).sendFile(path.join(__dirname, '../../public/pages/dashboardFreelancer.html'));
 });
 
 export default router;
