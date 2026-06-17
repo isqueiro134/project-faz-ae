@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faz Ae - Freelancers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/freelancersCliente.css">
+    <script src="../js/freelancersCliente.js" type="module"></script>
+</head>
+
+<body>
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-box">FA</div>
+                <span>Faz Ae <small>Cliente</small></span>
+            </div>
+            <nav>
+                <p>Menu Principal</p>
+                <ul>
+                    <li><a href="/dashboard-cliente"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                    <li><i class="fa-solid fa-briefcase"></i> Publicar Projeto</li>
+                    <li><i class="fa-solid fa-layer-group"></i> Meus Projetos</li>
+                    <li class="active"><a href="/freelancers"><i class="fa-solid fa-user-group"></i> Freelancers</a></li>
+                    <li><i class="fa-regular fa-comment"></i> Mensagens</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content freelancers-page">
+            <header class="header-top">
+                <div>Dashboard / <span class="breadcrumb-muted">Freelancers</span></div>
+                <a class="btn-secondary" href="/dashboard-cliente"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </header>
+
+            <section class="card marketplace-panel">
+                <div class="marketplace-heading">
+                    <div>
+                        <h1>Freelancers</h1>
+                        <p id="marketplace-subtitle">Escolha profissionais publicados na plataforma.</p>
+                    </div>
+                    <span class="status-badge ongoing" id="freelancer-count">0 perfis</span>
+                </div>
+
+                <div class="marketplace-filters">
+                    <label>
+                        Busca
+                        <input id="search-input" type="search" placeholder="Nome, titulo ou habilidade">
+                    </label>
+                    <label>
+                        Categoria
+                        <select id="category-filter" class="input">
+                            <option value="">Todas</option>
+                        </select>
+                    </label>
+                    <label>
+                        Ordenar
+                        <select id="sort-filter" class="input">
+                            <option value="rating">Melhor avaliacao</option>
+                            <option value="price">Menor preco</option>
+                            <option value="name">Nome</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="state-box" id="state-box">Carregando freelancers...</div>
+                <div class="freelancer-grid" id="freelancer-grid"></div>
+            </section>
+
+            <section class="card selected-panel" id="selected-panel" hidden>
+                <div>
+                    <span class="selected-label">Selecionado</span>
+                    <strong id="selected-name"></strong>
+                    <p id="selected-title"></p>
+                </div>
+                <button class="btn-secondary" type="button" onclick="controller.clearSelection()">Limpar escolha</button>
+            </section>
+        </main>
+    </div>
+
+    <div class="profile-modal" id="profile-modal" hidden>
+        <div class="modal-backdrop" onclick="controller.closeModal()"></div>
+        <section class="card modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+            <button class="modal-close" type="button" onclick="controller.closeModal()" aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content"></div>
+        </section>
+    </div>
+</body>
+
+</html>

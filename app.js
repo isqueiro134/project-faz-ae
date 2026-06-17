@@ -24,6 +24,7 @@ const PAGE_ROUTES = {
     'dashboard.html': '/dashboard',
     'dashboardCliente.html': '/dashboard-cliente',
     'dashboardFreelancer.html': '/dashboard-freelancer',
+    'freelancersCliente.html': '/freelancers',
 };
 
 // Impede acesso direto a /pages/*.html (e /index.html), forçando o uso das rotas protegidas.
