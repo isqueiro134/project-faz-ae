@@ -5,13 +5,20 @@ const continueButton = document.getElementById('continue');
 const options = document.querySelectorAll('.option');
 let selectedType = 'freelancer';
 
-// Usuário autenticado vem da sessão (cookie). Fallback p/ localStorage.
 const auth = new Auth();
-const sessionUser = await auth.me();
-const user = sessionUser || JSON.parse(localStorage.getItem('fazAeUser') || 'null');
-if (sessionUser) localStorage.setItem('fazAeUser', JSON.stringify(sessionUser));
+const context = await auth.context();
 
-nomeUsuario.textContent = user?.full_name || 'profissional';
+if (!context) {
+    window.location.href = '/login';
+    throw new Error('Nao autenticado.');
+}
+
+if (context?.has_profile) {
+    window.location.href = context.redirect_to;
+    throw new Error('Perfil ja selecionado.');
+}
+
+nomeUsuario.textContent = context?.user?.full_name || 'profissional';
 document.querySelector('[data-type="freelancer"]')?.classList.add('active');
 
 options.forEach((option) => {
@@ -22,6 +29,14 @@ options.forEach((option) => {
     });
 });
 
-continueButton.addEventListener('click', () => {
-    window.location.href = selectedType === 'freelancer' ? '/completar-perfil' : '/dashboard';
+continueButton.addEventListener('click', async () => {
+    continueButton.disabled = true;
+    try {
+        const profileType = selectedType === 'cliente' ? 'client' : 'freelancer';
+        const result = await auth.selectProfile(profileType);
+        window.location.href = result.redirect_to;
+    } catch (error) {
+        alert(error.message);
+        continueButton.disabled = false;
+    }
 });

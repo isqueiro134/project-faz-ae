@@ -69,7 +69,7 @@ class AuthRepository {
                  VALUES (?, ?, ?, ?, ?)`,
                 [userId, fullName, normalizedEmail, normalizedCpf, passwordHash],
             );
-            await db.run(`INSERT INTO profiles (id) VALUES (?)`, [userId]);
+            await db.run(`INSERT INTO profiles (id, user_type) VALUES (?, NULL)`, [userId]);
             await db.exec('COMMIT');
         } catch (err) {
             await db.exec('ROLLBACK').catch(() => {});

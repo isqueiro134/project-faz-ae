@@ -27,7 +27,7 @@ CREATE TABLE profiles (
     email_verified INTEGER DEFAULT 0, -- 0 = falso, 1 = verdadeiro
     phone_verified INTEGER DEFAULT 0, -- 0 = falso, 1 = verdadeiro
     is_verified INTEGER DEFAULT 0,     
-    user_type TEXT DEFAULT 'client' CHECK(user_type IN ('client', 'freelancer', 'both')),
+    user_type TEXT NULL CHECK(user_type IN ('client', 'freelancer', 'both')),
     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
     updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE

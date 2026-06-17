@@ -2,6 +2,7 @@ import express from 'express';
 import UserRepository from '../Repository/UserRepository.js';
 import AuthRepository from '../Repository/AuthRepository.js';
 import SessionRepository from '../Repository/SessionRepository.js';
+import ProfileRepository from '../Repository/ProfileRepository.js';
 import { setSessionCookie } from '../utils/cookies.js';
 
 const router = express.Router();
@@ -9,8 +10,9 @@ const router = express.Router();
 /** Cria a sessão, seta o cookie e devolve o resultado com a sessão. */
 async function startSession(res, result) {
     const session = await new SessionRepository().create(result.user.id);
+    const context = await new ProfileRepository().getContext(result.user);
     setSessionCookie(res, session.token);
-    return { ...result, session: { expires_at: session.expiresAt } };
+    return { ...result, ...context, session: { expires_at: session.expiresAt } };
 }
 
 router.post("/login", async (req, res) => {
