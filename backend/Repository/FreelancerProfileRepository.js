@@ -154,6 +154,34 @@ class FreelancerProfileRepository {
         }));
     }
 
+    async findByUserId(userId) {
+        await this.ensureColumns();
+
+        const row = await db.get(
+            `SELECT
+                fp.*,
+                p.bio
+            FROM freelancer_profiles fp
+            INNER JOIN profiles p ON p.id = fp.user_id
+            WHERE fp.user_id = ?`,
+            [userId],
+        );
+
+        if (!row) return null;
+
+        return {
+            ...row,
+            skills: parseJson(row.skills, []),
+            languages: parseJson(row.languages, []),
+            tools: parseJson(row.tools, []),
+            niches: parseJson(row.niches, []),
+            project_types: parseJson(row.project_types, []),
+            links: parseJson(row.links, {}),
+            portfolio_items: parseJson(row.portfolio_items, []),
+            urgent_projects: Boolean(row.urgent_projects),
+        };
+    }
+
     mapValues(data) {
         return {
             professional_title: data.professional_title,

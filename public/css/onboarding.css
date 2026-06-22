@@ -1,5 +1,5 @@
 body {
-  overflow: hidden;
+  overflow: auto;
 }
 
 .layout {
@@ -136,10 +136,6 @@ body {
 }
 
 @media (max-width: 78rem) {
-  body {
-    overflow: auto;
-  }
-
   .layout {
     flex-direction: column;
   }

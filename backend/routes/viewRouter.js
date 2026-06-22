@@ -29,7 +29,7 @@ router.get('/onboarding', requirePageAuth, async (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/onboarding.html'));
 });
 
-router.get('/completar-perfil', requirePageAuth, async (req, res) => {
+router.get('/perfil', requirePageAuth, async (req, res) => {
     const context = await new ProfileRepository().getContext(req.user);
     if (context.profile_type !== 'freelancer') return res.redirect(context.redirect_to);
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/completarPerfil.html'));

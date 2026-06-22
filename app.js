@@ -20,7 +20,7 @@ const PAGE_ROUTES = {
     'cadastro.html': '/cadastro',
     'recuperarSenha.html': '/recuperar-senha',
     'onboarding.html': '/onboarding',
-    'completarPerfil.html': '/completar-perfil',
+    'completarPerfil.html': '/perfil',
     'dashboard.html': '/dashboard',
     'dashboardCliente.html': '/dashboard-cliente',
     'dashboardFreelancer.html': '/dashboard-freelancer',

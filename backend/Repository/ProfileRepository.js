@@ -11,7 +11,8 @@ function resolveRedirect(profileType) {
 
 class ProfileRepository {
     async getContext(user) {
-        const [clientProfile, freelancerProfile] = await Promise.all([
+        const [baseProfile, clientProfile, freelancerProfile] = await Promise.all([
+            db.get(`SELECT * FROM profiles WHERE id = ?`, [user.id]),
             db.get(`SELECT * FROM client_profiles WHERE user_id = ?`, [user.id]),
             db.get(`SELECT * FROM freelancer_profiles WHERE user_id = ?`, [user.id]),
         ]);
@@ -23,8 +24,25 @@ class ProfileRepository {
             profile_type: profileType,
             has_profile: Boolean(profileType),
             redirect_to: resolveRedirect(profileType),
+            base_profile: baseProfile || null,
             profile: profileType === 'client' ? clientProfile : freelancerProfile || null,
         };
+    }
+
+    async updateBaseProfile(userId, data) {
+        await db.run(
+            `UPDATE profiles
+             SET avatar_url = ?, bio = ?, phone = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+             WHERE id = ?`,
+            [
+                data.avatar_url?.trim() || null,
+                data.bio?.trim() || null,
+                data.phone?.trim() || null,
+                userId,
+            ],
+        );
+
+        return db.get(`SELECT * FROM profiles WHERE id = ?`, [userId]);
     }
 
     async selectProfile(userId, profileType) {

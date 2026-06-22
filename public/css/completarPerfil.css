@@ -1,6 +1,6 @@
 body {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow: auto;
 }
 
 .profile-shell {
@@ -59,6 +59,13 @@ nav li {
   font-weight: 700;
 }
 
+nav li a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
 nav li i {
   width: 1.8rem;
   color: currentColor;
@@ -74,7 +81,7 @@ nav li.active {
 
 .profile-main {
   flex: 1;
-  overflow-y: auto;
+  min-height: 100vh;
   padding: var(--space-8);
   background:
     radial-gradient(circle at top right, rgba(22, 163, 74, 0.1), transparent 34rem),
@@ -113,6 +120,68 @@ nav li.active {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 32rem;
   gap: var(--space-6);
+}
+
+.profile-data-card {
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.profile-data-card h2 {
+  margin: var(--space-1) 0 var(--space-5);
+  font-size: 2.1rem;
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 999rem;
+  background: var(--color-primary-soft);
+  background-position: center;
+  background-size: cover;
+  color: var(--color-primary);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.profile-summary strong,
+.profile-summary span {
+  display: block;
+}
+
+.profile-summary strong {
+  color: var(--color-text);
+  font-size: 1.8rem;
+}
+
+.profile-summary span {
+  color: var(--color-text-muted);
+  font-size: 1.35rem;
+}
+
+.profile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.profile-badges span {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999rem;
+  background: var(--color-surface-soft);
+  font-size: 1.15rem;
+  font-weight: 800;
 }
 
 .profile-form,
@@ -234,6 +303,17 @@ textarea.input {
   border-top: 0.1rem solid var(--color-border);
 }
 
+.form-actions.compact {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-right: auto;
+}
+
 .hidden {
   display: none;
 }
@@ -292,11 +372,6 @@ textarea.input {
 }
 
 @media (max-width: 96rem) {
-  body {
-    height: auto;
-    overflow: auto;
-  }
-
   .profile-shell {
     flex-direction: column;
   }
@@ -341,6 +416,11 @@ textarea.input {
   .profile-header,
   .form-actions {
     flex-direction: column;
+  }
+
+  .edit-actions {
+    width: 100%;
+    flex-direction: column-reverse;
   }
 
   .form-grid {

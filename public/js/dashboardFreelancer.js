@@ -21,8 +21,17 @@ const controller = {
     init() {
         document.getElementById('dashboard-subtitle').textContent = `Perfil de ${context.user.full_name}.`;
         document.getElementById('profile-strength').textContent = `${context.profile?.profile_strength || 0}%`;
+        this.toggleCompleteProfileAction();
         this.renderProjects();
         this.setupEventListeners();
+    },
+
+    isProfileComplete() {
+        return context.profile?.status === 'published' || Number(context.profile?.profile_strength || 0) >= 100;
+    },
+
+    toggleCompleteProfileAction() {
+        document.getElementById('complete-profile-action')?.classList.toggle('hidden', this.isProfileComplete());
     },
 
     renderProjects() {

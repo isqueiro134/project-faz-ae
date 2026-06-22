@@ -3,3 +3,5 @@ node_modules/
 # Opcionalmente, ignore o arquivo de lock também (já que ele muda muito)
 package-lock.json
 .env
+banco.db-shm
+banco.db-wal

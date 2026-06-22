@@ -38,6 +38,20 @@ router.get('/', requireApiAuth, async (req, res) => {
     }
 });
 
+router.get('/me', requireApiAuth, async (req, res) => {
+    try {
+        const context = await new ProfileRepository().getContext(req.user);
+        if (context.profile_type !== 'freelancer') {
+            return res.status(403).json({ message: 'Ambiente incompativel.' });
+        }
+
+        const profile = await new FreelancerProfileRepository().findByUserId(req.user.id);
+        return res.status(200).json({ profile });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+
 router.post('/', requireApiAuth, async (req, res) => {
     // user_id vem da sessão (cookie), nunca do corpo enviado pelo cliente.
     const data = { ...req.body, user_id: req.user.id };

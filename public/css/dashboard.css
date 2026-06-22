@@ -1,6 +1,6 @@
 body {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow: auto;
 }
 
 .dashboard-shell {
@@ -82,7 +82,7 @@ nav li.active {
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  min-height: 100vh;
   padding: var(--space-8);
   background:
     radial-gradient(circle at top right, rgba(22, 163, 74, 0.1), transparent 34rem),
@@ -96,6 +96,10 @@ nav li.active {
   gap: var(--space-4);
   margin-bottom: var(--space-8);
   color: var(--color-text);
+}
+
+.hidden {
+  display: none !important;
 }
 
 .breadcrumb-muted,
@@ -262,21 +266,7 @@ nav li.active {
   font-size: 1.9rem;
 }
 
-::-webkit-scrollbar {
-  width: 0.6rem;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 999rem;
-  background: #c5d3ca;
-}
-
 @media (max-width: 96rem) {
-  body {
-    height: auto;
-    overflow: auto;
-  }
-
   .dashboard-shell {
     flex-direction: column;
   }
