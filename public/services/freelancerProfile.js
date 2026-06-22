@@ -1,4 +1,13 @@
 class FreelancerProfile {
+    async me() {
+        const response = await fetch('/api/freelancer-profile/me');
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(result.message || 'Nao foi possivel carregar seu perfil.');
+        }
+        return result.profile || null;
+    }
+
     /** Publica/atualiza o perfil de freelancer. Lança Error (com .errors) em falha. */
     async save(data) {
         const response = await fetch('/api/freelancer-profile', {

@@ -57,12 +57,39 @@ html {
 body {
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
   background: var(--color-page);
   color: var(--color-text);
   font-family: var(--font-family);
   font-size: 1.6rem;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+}
+
+* {
+  scrollbar-color: #b8c8be transparent;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 0.2rem solid transparent;
+  border-radius: 999rem;
+  background: #b8c8be;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9caea4;
+  background-clip: content-box;
 }
 
 a {

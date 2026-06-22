@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Faz Aê - Completar Perfil</title>
+  <title>Faz Aê - Perfil</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -26,9 +26,10 @@
       <nav aria-label="Menu principal">
         <p>Menu Principal</p>
         <ul>
-          <li><i class="fa-solid fa-house"></i> Dashboard</li>
-          <li class="active"><i class="fa-solid fa-user-check"></i> Completar Perfil</li>
-          <li><i class="fa-solid fa-briefcase"></i> Vagas</li>
+          <li><a href="/dashboard-freelancer"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+          <li><i class="fa-solid fa-magnifying-glass"></i> Buscar Projetos</li>
+          <li><i class="fa-solid fa-file-signature"></i> Propostas</li>
+          <li class="active"><a href="/perfil"><i class="fa-solid fa-user"></i> Meu Perfil</a></li>
           <li><i class="fa-regular fa-comment"></i> Mensagens</li>
         </ul>
       </nav>
@@ -38,12 +39,50 @@
       <header class="profile-header">
         <div>
           <span class="eyebrow">Perfil freelancer</span>
-          <h1>Complete seu perfil profissional</h1>
-          <p>Quanto melhor seu perfil, melhores serão os matches com projetos de software, design e
-            redação.</p>
+          <h1>Meu perfil</h1>
+          <p>Atualize seus dados gerais e as informações profissionais em um só lugar.</p>
         </div>
-        <a class="btn-secondary" href="/dashboard-freelancer">Salvar e sair</a>
       </header>
+
+      <section class="profile-data-card card">
+        <div>
+          <span class="eyebrow">Dados gerais</span>
+          <h2>Informações da conta</h2>
+        </div>
+        <form id="baseProfileForm" class="base-profile-form">
+          <div class="profile-summary">
+            <div class="profile-avatar" id="profileAvatar">FA</div>
+            <div>
+              <strong id="profileName">Freelancer</strong>
+              <span id="profileEmail">email@exemplo.com</span>
+              <div class="profile-badges">
+                <span id="emailVerified">Email não verificado</span>
+                <span id="phoneVerified">Telefone não verificado</span>
+                <span id="profileVerified">Perfil não verificado</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="avatarUrl">URL do avatar</label>
+              <input id="avatarUrl" name="avatar_url" class="input" type="url" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label for="phone">Telefone</label>
+              <input id="phone" name="phone" class="input" maxlength="20" placeholder="(11) 99999-9999">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="baseBio">Bio do perfil</label>
+            <textarea id="baseBio" name="bio" class="input" maxlength="700" rows="4"
+              placeholder="Conte brevemente quem você é."></textarea>
+          </div>
+          <div class="form-actions compact">
+            <span class="form-alert" id="baseProfileAlert" aria-live="polite"></span>
+            <button type="submit" class="btn-primary">Salvar dados gerais</button>
+          </div>
+        </form>
+      </section>
 
       <div class="profile-layout">
         <form class="profile-form card" id="profileForm" novalidate>
@@ -211,6 +250,10 @@
           <div class="form-alert" id="formAlert" aria-live="polite"></div>
 
           <div class="form-actions">
+            <div class="edit-actions hidden" id="profileEditActions">
+              <button type="button" class="btn-secondary" id="discardProfileChanges">Descartar</button>
+              <button type="button" class="btn-primary" id="saveProfileChanges">Salvar alterações</button>
+            </div>
             <button type="button" class="btn-secondary" id="backStep">Voltar</button>
             <button type="button" class="btn-primary" id="nextStep">Continuar</button>
             <button type="submit" class="btn-primary hidden" id="publishProfile">Publicar perfil</button>

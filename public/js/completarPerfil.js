@@ -19,11 +19,16 @@ if (context.profile_type !== 'freelancer') {
 sessionUser = context.user;
 
 const form = document.getElementById('profileForm');
+const baseProfileForm = document.getElementById('baseProfileForm');
+const baseProfileAlert = document.getElementById('baseProfileAlert');
 const steps = [...document.querySelectorAll('.profile-step')];
 const stepButtons = [...document.querySelectorAll('[data-step-button]')];
 const backStep = document.getElementById('backStep');
 const nextStep = document.getElementById('nextStep');
 const publishProfile = document.getElementById('publishProfile');
+const profileEditActions = document.getElementById('profileEditActions');
+const saveProfileChanges = document.getElementById('saveProfileChanges');
+const discardProfileChanges = document.getElementById('discardProfileChanges');
 const formAlert = document.getElementById('formAlert');
 const portfolioList = document.getElementById('portfolioList');
 const addProject = document.getElementById('addProject');
@@ -36,6 +41,50 @@ const bioCount = document.getElementById('bioCount');
 const draftKey = 'fazAeFreelancerProfileDraft';
 let currentStep = 0;
 let portfolioIndex = 0;
+let savedProfile = null;
+let profileSnapshot = null;
+let isApplyingProfileData = false;
+
+const selectValueMaps = {
+    category: {
+        'Design e Criatividade': 'design',
+        'Desenvolvimento e Tecnologia': 'desenvolvimento',
+        'Marketing e Conteudo': 'redacao',
+        'Marketing e Conteúdo': 'redacao',
+        'Video e Animacao': 'design',
+        'Vídeo e Animação': 'design',
+    },
+    availability: {
+        'Até 10h por semana': 'ate-10h',
+        'Ate 10h por semana': 'ate-10h',
+        '10h por semana': 'ate-10h',
+        '15h por semana': '10-20h',
+        '20h por semana': '20-40h',
+        '25h por semana': '20-40h',
+        '30h por semana': '20-40h',
+        '40h por semana': '20-40h',
+    },
+    pricing_model: {
+        project: 'fixed',
+        fixed: 'fixed',
+        hourly: 'hourly',
+        both: 'both',
+    },
+    response_time: {
+        'Responde em ate 2 horas': 'ate-2h',
+        'Responde em até 2 horas': 'ate-2h',
+        'Responde no mesmo dia': 'mesmo-dia',
+        'No mesmo dia': 'mesmo-dia',
+        'Responde em ate 4 horas': '24h',
+        'Responde em até 4 horas': '24h',
+        'Responde em ate 6 horas': '24h',
+        'Responde em até 6 horas': '24h',
+        'Responde em ate 8 horas': '24h',
+        'Responde em até 8 horas': '24h',
+        'Responde em ate 24 horas': '24h',
+        'Responde em até 24 horas': '24h',
+    },
+};
 
 function escapeHtml(value) {
     return String(value || '')
@@ -53,8 +102,112 @@ function splitList(value) {
         .filter((item, index, list) => list.indexOf(item) === index);
 }
 
+function setFieldValue(name, value) {
+    const field = form.elements[name];
+    if (!field || value === null || value === undefined || value === '') return;
+    const fieldValue = selectValueMaps[name]?.[value] || value;
+
+    if (field.tagName === 'SELECT') {
+        const exactOption = [...field.options].find((option) => option.value === String(fieldValue));
+        if (exactOption) {
+            field.value = exactOption.value;
+        }
+        return;
+    }
+
+    field.value = fieldValue;
+}
+
+function resolvePortfolioLink(profile) {
+    return profile.portfolio_url ||
+        profile.links?.portfolio ||
+        profile.links?.github ||
+        profile.links?.behance ||
+        profile.links?.website ||
+        profile.links?.vimeo ||
+        profile.links?.instagram ||
+        '';
+}
+
+function normalizePortfolioItem(item = {}) {
+    return {
+        title: item.title || item.project_title || item.projectTitle || item.name || '',
+        category: item.category || item.project_category || item.projectCategory || savedProfile?.category || '',
+        url: item.url || item.project_url || item.projectUrl || item.link || resolvePortfolioLink(savedProfile || {}),
+        description: item.description || item.project_description || item.projectDescription || '',
+    };
+}
+
 function getUser() {
     return sessionUser;
+}
+
+function getInitials(name) {
+    return String(name || 'FA')
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part.charAt(0))
+        .join('')
+        .toUpperCase();
+}
+
+function renderBaseProfile(profile = {}) {
+    const avatar = document.getElementById('profileAvatar');
+    document.getElementById('profileName').textContent = sessionUser.full_name || 'Freelancer';
+    document.getElementById('profileEmail').textContent = sessionUser.email || '';
+    document.getElementById('emailVerified').textContent = profile.email_verified ? 'Email verificado' : 'Email não verificado';
+    document.getElementById('phoneVerified').textContent = profile.phone_verified ? 'Telefone verificado' : 'Telefone não verificado';
+    document.getElementById('profileVerified').textContent = profile.is_verified ? 'Perfil verificado' : 'Perfil não verificado';
+
+    avatar.textContent = profile.avatar_url ? '' : getInitials(sessionUser.full_name);
+    avatar.style.backgroundImage = profile.avatar_url ? `url("${profile.avatar_url}")` : '';
+
+    Object.entries({
+        avatar_url: profile.avatar_url,
+        phone: profile.phone,
+        bio: profile.bio,
+    }).forEach(([name, value]) => {
+        const field = baseProfileForm.elements[name];
+        if (field) field.value = value || '';
+    });
+}
+
+function showBaseProfileMessage(message, success = false) {
+    baseProfileAlert.textContent = message;
+    baseProfileAlert.classList.toggle('success', success);
+}
+
+async function submitBaseProfile(event) {
+    event.preventDefault();
+
+    const data = new FormData(baseProfileForm);
+    try {
+        const response = await fetch('/api/profiles/me', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                avatar_url: data.get('avatar_url')?.trim(),
+                phone: data.get('phone')?.trim(),
+                bio: data.get('bio')?.trim(),
+            }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.message || 'Não foi possível salvar os dados gerais.');
+
+        renderBaseProfile(result.profile);
+        form.elements.bio.value = result.profile?.bio || '';
+        bioCount.textContent = bio.value.length;
+        renderStrength();
+        if (savedProfile) {
+            savedProfile.bio = result.profile?.bio || '';
+            profileSnapshot = normalizeProfileForCompare(collectData('published'));
+            updateProfileEditActions();
+        }
+        showBaseProfileMessage('Dados gerais salvos.', true);
+    } catch (error) {
+        showBaseProfileMessage(error.message || 'Não foi possível salvar os dados gerais.');
+    }
 }
 
 function getPortfolioItems() {
@@ -99,19 +252,20 @@ function collectData(status = 'draft') {
         category: data.get('category'),
         level: data.get('level'),
         location: data.get('location')?.trim(),
-        languages: [],
+        languages: savedProfile?.languages || [],
         skills: splitList(data.get('skills') || ''),
         tools: splitList(data.get('tools') || ''),
         niches: splitList(data.get('niches') || ''),
-        project_types: [],
+        project_types: savedProfile?.project_types || [],
         availability: data.get('availability'),
         work_model: data.get('work_model'),
         bio: data.get('bio')?.trim(),
         experience_years: Number(data.get('experience_years')) || null,
         result_highlight: data.get('result_highlight')?.trim(),
-        education: null,
+        education: savedProfile?.education || null,
         portfolio_url: data.get('portfolio_url')?.trim(),
         links: {
+            ...(savedProfile?.links || {}),
             linkedin: data.get('linkedin')?.trim(),
             portfolio: data.get('portfolio_url')?.trim(),
         },
@@ -119,13 +273,53 @@ function collectData(status = 'draft') {
         pricing_model: data.get('pricing_model'),
         hourly_rate: Number(data.get('hourly_rate')) || null,
         project_rate_min: Number(data.get('project_rate_min')) || null,
-        project_rate_max: null,
+        project_rate_max: savedProfile?.project_rate_max || null,
         response_time: data.get('response_time'),
-        project_size: null,
+        project_size: savedProfile?.project_size || null,
         urgent_projects: data.get('urgent_projects') === 'on',
         profile_strength: calculateStrength().total,
         status,
     };
+}
+
+function normalizeProfileForCompare(profile) {
+    return JSON.stringify({
+        professional_title: profile.professional_title || '',
+        category: profile.category || '',
+        level: profile.level || '',
+        location: profile.location || '',
+        languages: profile.languages || [],
+        skills: profile.skills || [],
+        tools: profile.tools || [],
+        niches: profile.niches || [],
+        project_types: profile.project_types || [],
+        availability: profile.availability || '',
+        work_model: profile.work_model || '',
+        bio: profile.bio || '',
+        experience_years: profile.experience_years || null,
+        result_highlight: profile.result_highlight || '',
+        education: profile.education || null,
+        portfolio_url: profile.portfolio_url || '',
+        links: profile.links || {},
+        portfolio_items: profile.portfolio_items || [],
+        pricing_model: profile.pricing_model || '',
+        hourly_rate: profile.hourly_rate || null,
+        project_rate_min: profile.project_rate_min || null,
+        project_rate_max: profile.project_rate_max || null,
+        response_time: profile.response_time || '',
+        project_size: profile.project_size || null,
+        urgent_projects: Boolean(profile.urgent_projects),
+    });
+}
+
+function updateProfileEditActions() {
+    if (!profileSnapshot || isApplyingProfileData) {
+        profileEditActions.classList.add('hidden');
+        return;
+    }
+
+    const currentSnapshot = normalizeProfileForCompare(collectData('published'));
+    profileEditActions.classList.toggle('hidden', currentSnapshot === profileSnapshot);
 }
 
 function calculateStrength() {
@@ -196,7 +390,7 @@ function renderStep() {
     stepButtons.forEach((button, index) => button.classList.toggle('active', index === currentStep));
     backStep.disabled = currentStep === 0;
     nextStep.classList.toggle('hidden', currentStep === steps.length - 1);
-    publishProfile.classList.toggle('hidden', currentStep !== steps.length - 1);
+    publishProfile.classList.toggle('hidden', currentStep !== steps.length - 1 || Boolean(profileSnapshot));
 }
 
 function setInvalid(field, invalid) {
@@ -353,9 +547,50 @@ function addPortfolioItem(item = {}) {
     portfolioList.appendChild(element);
 }
 
+function applyProfileData(profile) {
+    isApplyingProfileData = true;
+    Object.entries({
+        professional_title: profile.professional_title,
+        category: profile.category,
+        level: profile.level,
+        location: profile.location,
+        skills: profile.skills?.join(', '),
+        tools: profile.tools?.join(', '),
+        niches: profile.niches?.join(', '),
+        availability: profile.availability,
+        work_model: profile.work_model,
+        bio: profile.bio,
+        experience_years: profile.experience_years,
+        result_highlight: profile.result_highlight,
+        linkedin: profile.links?.linkedin,
+        portfolio_url: resolvePortfolioLink(profile),
+        pricing_model: profile.pricing_model,
+        hourly_rate: profile.hourly_rate,
+        project_rate_min: profile.project_rate_min,
+        response_time: profile.response_time,
+    }).forEach(([name, value]) => setFieldValue(name, value));
+
+    form.elements.urgent_projects.checked = Boolean(profile.urgent_projects);
+    portfolioList.innerHTML = '';
+    (profile.portfolio_items?.length ? profile.portfolio_items : [{}]).map(normalizePortfolioItem).forEach(addPortfolioItem);
+    bioCount.textContent = bio.value.length;
+    renderStrength();
+    isApplyingProfileData = false;
+}
+
+function hasSavedProfileData(profile) {
+    return Boolean(
+        profile?.status === 'published' ||
+        profile?.professional_title ||
+        profile?.bio ||
+        profile?.portfolio_items?.length
+    );
+}
+
 function saveDraft() {
     localStorage.setItem(draftKey, JSON.stringify(collectData('draft')));
     renderStrength();
+    updateProfileEditActions();
 }
 
 function loadDraft() {
@@ -384,13 +619,28 @@ function loadDraft() {
         hourly_rate: draft.hourly_rate,
         project_rate_min: draft.project_rate_min,
         response_time: draft.response_time,
-    }).forEach(([name, value]) => {
-        const field = form.elements[name];
-        if (field && value) field.value = value;
-    });
+    }).forEach(([name, value]) => setFieldValue(name, value));
 
     if (draft.urgent_projects) form.elements.urgent_projects.checked = true;
-    (draft.portfolio_items?.length ? draft.portfolio_items : [{}]).forEach(addPortfolioItem);
+    (draft.portfolio_items?.length ? draft.portfolio_items : [{}]).map(normalizePortfolioItem).forEach(addPortfolioItem);
+}
+
+async function loadInitialProfile() {
+    try {
+        const profile = await new FreelancerProfile().me();
+        if (hasSavedProfileData(profile)) {
+            savedProfile = profile;
+            localStorage.removeItem(draftKey);
+            applyProfileData(profile);
+            profileSnapshot = normalizeProfileForCompare(collectData('published'));
+            updateProfileEditActions();
+            return;
+        }
+    } catch (_) {
+        showMessage('Nao foi possivel carregar seu perfil salvo agora.');
+    }
+
+    loadDraft();
 }
 
 function showMessage(message, success = false) {
@@ -398,33 +648,72 @@ function showMessage(message, success = false) {
     formAlert.classList.toggle('success', success);
 }
 
-async function submitProfile(event) {
-    event.preventDefault();
+function validateAllSteps() {
+    for (let index = 0; index < steps.length; index += 1) {
+        if (!validateStep(index)) {
+            currentStep = index;
+            renderStep();
+            return false;
+        }
+    }
 
-    if (!validateStep(currentStep)) return;
+    return true;
+}
 
+async function persistPublishedProfile(successMessage) {
     const profile = collectData('published');
 
     if (!profile.user_id) {
         showMessage('Faça login novamente para publicar seu perfil.');
-        return;
+        return false;
     }
 
     try {
         await new FreelancerProfile().save(profile);
+        savedProfile = await new FreelancerProfile().me();
         localStorage.removeItem(draftKey);
-        showMessage('Perfil publicado. Você já pode receber matches melhores.', true);
+        if (savedProfile) applyProfileData(savedProfile);
+        profileSnapshot = normalizeProfileForCompare(collectData('published'));
+        updateProfileEditActions();
+        showMessage(successMessage, true);
+        return true;
     } catch (error) {
         const firstError = error.errors ? Object.values(error.errors)[0] : error.message;
         showMessage(firstError || 'Não foi possível publicar agora. Tente novamente.');
+        return false;
     }
 }
 
-loadDraft();
+async function saveProfileEdition() {
+    if (!validateAllSteps()) return;
+    await persistPublishedProfile('Alterações salvas.');
+}
+
+function discardProfileEdition() {
+    if (!savedProfile) return;
+    localStorage.removeItem(draftKey);
+    applyProfileData(savedProfile);
+    profileSnapshot = normalizeProfileForCompare(collectData('published'));
+    updateProfileEditActions();
+    showMessage('Alterações descartadas.', true);
+}
+
+async function submitProfile(event) {
+    event.preventDefault();
+
+    if (!validateStep(currentStep)) return;
+    await persistPublishedProfile('Perfil publicado. Você já pode receber matches melhores.');
+}
+
+renderBaseProfile(context.base_profile || {});
+await loadInitialProfile();
 renderStep();
 renderStrength();
 bioCount.textContent = bio.value.length;
 
+baseProfileForm.addEventListener('submit', submitBaseProfile);
+saveProfileChanges.addEventListener('click', saveProfileEdition);
+discardProfileChanges.addEventListener('click', discardProfileEdition);
 form.addEventListener('input', () => {
     bioCount.textContent = bio.value.length;
     saveDraft();
