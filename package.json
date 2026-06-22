@@ -5,7 +5,8 @@
   "scripts": {
     "server": "node --watch app.js",
     "client": "vite",
-    "dev": "npm run server & npm run client"
+    "dev": "npm run server & npm run client",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "Isaque Oliveira, Enzo Miashita, Pedro Gama e Ícaro Alexandre",
