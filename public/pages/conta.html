@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faz Aê - Conta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/conta.css">
+    <script src="../js/conta.js" type="module"></script>
+    <script src="../js/logout.js" type="module"></script>
+</head>
+
+<body>
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-box">FA</div>
+                <span>Faz Aê <small id="accountProfileLabel">Conta</small></span>
+            </div>
+            <nav aria-label="Menu principal">
+                <p>Menu Principal</p>
+                <ul id="accountNavigation"></ul>
+            </nav>
+            <button class="sidebar-logout" type="button" data-logout>
+                <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <div class="account-page">
+                <header class="account-heading">
+                    <h1>Conta</h1>
+                    <p>Gerencie as configurações e o encerramento definitivo da sua conta.</p>
+                </header>
+
+                <section class="card account-card account-warning">
+                    <h2>Tem certeza que deseja fechar a sua conta?</h2>
+                    <p id="accountImpactIntro"></p>
+                    <ul class="account-impact-list" id="accountImpactList"></ul>
+                </section>
+
+                <section class="card account-card">
+                    <h2>Conte por que está saindo</h2>
+                    <p>Seu feedback será armazenado anonimamente e pode ajudar a melhorar o Faz Aê.</p>
+
+                    <form class="account-form" id="closeAccountForm" novalidate>
+                        <div>
+                            <label for="closureReason">Motivo do encerramento *</label>
+                            <select id="closureReason" name="reason" required>
+                                <option value="">Selecione um motivo</option>
+                                <option value="no_longer_uses">Não utilizo mais a plataforma</option>
+                                <option value="difficult_to_use">Tive dificuldade para utilizar</option>
+                                <option value="missing_features">Não encontrei os recursos que precisava</option>
+                                <option value="service_quality">Não fiquei satisfeito com o serviço</option>
+                                <option value="privacy">Tenho preocupações com privacidade</option>
+                                <option value="another_account">Criei ou utilizarei outra conta</option>
+                                <option value="other">Outro motivo</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label id="detailsLabel" for="closureDetails">Detalhes e sugestões (opcional)</label>
+                            <textarea id="closureDetails" name="details" maxlength="1000"
+                                placeholder="Descreva melhor o motivo ou deixe sugestões para o Faz Aê."></textarea>
+                            <small>Máximo de 1.000 caracteres.</small>
+                        </div>
+
+                        <p class="account-alert" id="accountAlert" role="status" aria-live="polite"></p>
+
+                        <button class="close-account-button" id="closeAccountButton" type="submit" disabled>
+                            Encerrar minha conta
+                        </button>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

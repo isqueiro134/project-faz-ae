@@ -70,8 +70,15 @@ class Auth {
 
     /** Encerra a sessão no servidor e limpa o estado local. */
     async logout() {
-        await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+        const response = await fetch('/api/auth/logout', { method: 'POST' });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Não foi possível encerrar a sessão.');
+        }
+
         localStorage.removeItem('fazAeUser');
+        return result;
     }
 
     /** Solicita recuperação de senha (resposta genérica do backend). */

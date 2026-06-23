@@ -9,6 +9,8 @@ body {
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 26rem;
   border-right: 0.1rem solid var(--color-border);
   background: var(--color-surface);

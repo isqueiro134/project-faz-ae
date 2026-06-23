@@ -21,6 +21,7 @@ const PAGE_ROUTES = {
     'recuperarSenha.html': '/recuperar-senha',
     'onboarding.html': '/onboarding',
     'completarPerfil.html': '/perfil',
+    'conta.html': '/conta',
     'dashboard.html': '/dashboard',
     'dashboardCliente.html': '/dashboard-cliente',
     'dashboardFreelancer.html': '/dashboard-freelancer',

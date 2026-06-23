@@ -3,7 +3,9 @@ import UserRepository from '../Repository/UserRepository.js';
 import AuthRepository from '../Repository/AuthRepository.js';
 import SessionRepository from '../Repository/SessionRepository.js';
 import ProfileRepository from '../Repository/ProfileRepository.js';
-import { setSessionCookie } from '../utils/cookies.js';
+import AccountRepository from '../Repository/AccountRepository.js';
+import { requireApiAuth } from '../middleware/auth.js';
+import { setSessionCookie, clearSessionCookie } from '../utils/cookies.js';
 
 const router = express.Router();
 
@@ -24,6 +26,21 @@ router.post("/login", async (req, res) => {
         res.status(error.status || 401).json({ message: error.message });
     }
 })
+
+router.delete('/me', requireApiAuth, async (req, res) => {
+    try {
+        const { reason, details } = req.body;
+        await new AccountRepository().closeAccount(req.user.id, reason, details);
+        clearSessionCookie(res);
+        res.status(200).json({ message: 'Conta encerrada com sucesso.' });
+    } catch (error) {
+        const status = error.status || 500;
+        const message = error.status
+            ? error.message
+            : 'Não foi possível encerrar sua conta. Tente novamente.';
+        res.status(status).json({ message });
+    }
+});
 
 // MVP: não envia e-mail real. Resposta genérica para não revelar quais contas existem.
 router.post("/recover-password", (req, res) => {

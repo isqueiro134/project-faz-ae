@@ -35,6 +35,10 @@ router.get('/perfil', requirePageAuth, async (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/completarPerfil.html'));
 });
 
+router.get('/conta', requirePageAuth, (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '../../public/pages/conta.html'));
+});
+
 router.get('/dashboard', requirePageAuth, (req, res) => {
     res.redirect('/dashboard-cliente');
 });

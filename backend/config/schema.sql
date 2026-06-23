@@ -19,6 +19,22 @@ CREATE TABLE sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE account_closure_feedback (
+    id TEXT PRIMARY KEY NOT NULL,
+    reason TEXT NOT NULL CHECK(reason IN (
+        'no_longer_uses',
+        'difficult_to_use',
+        'missing_features',
+        'service_quality',
+        'privacy',
+        'another_account',
+        'other'
+    )),
+    details TEXT NULL CHECK(details IS NULL OR length(details) <= 1000),
+    profile_type TEXT NOT NULL CHECK(profile_type IN ('client', 'freelancer', 'both', 'none')),
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+);
+
 CREATE TABLE profiles (
     id TEXT PRIMARY KEY NOT NULL,
     avatar_url TEXT NULL,

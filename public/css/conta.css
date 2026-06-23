@@ -1,0 +1,136 @@
+body {
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.account-page {
+  width: 100%;
+  max-width: 96rem;
+  margin: 0 auto;
+}
+
+.account-heading {
+  margin-bottom: var(--space-8);
+}
+
+.account-heading h1 {
+  margin-bottom: var(--space-2);
+  font-size: 3rem;
+}
+
+.account-heading p,
+.account-card p {
+  color: var(--color-text-muted);
+}
+
+.account-card {
+  padding: var(--space-6);
+}
+
+.account-card + .account-card {
+  margin-top: var(--space-5);
+}
+
+.account-warning {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.account-card h2 {
+  margin-bottom: var(--space-3);
+  font-size: 2rem;
+}
+
+.account-impact-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0 2rem;
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.account-form {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.account-form select,
+.account-form textarea {
+  width: 100%;
+  padding: 1.1rem 1.2rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.account-form textarea {
+  min-height: 13rem;
+  resize: vertical;
+}
+
+.account-form select:focus,
+.account-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.3rem rgba(22, 163, 74, 0.18);
+}
+
+.account-form small {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.close-account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  min-height: 4.4rem;
+  padding: 1.1rem 1.8rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-error);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.close-account-button:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.close-account-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.account-alert {
+  display: none;
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.account-alert.show {
+  display: block;
+}
+
+.account-alert.error {
+  color: var(--color-error);
+}
+
+@media (max-width: 42rem) {
+  .account-heading h1 {
+    font-size: 2.4rem;
+  }
+
+  .account-card {
+    padding: var(--space-5);
+  }
+
+  .close-account-button {
+    width: 100%;
+  }
+}
