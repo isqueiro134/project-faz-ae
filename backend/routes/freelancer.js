@@ -14,6 +14,7 @@ function validateProfile(data) {
     if (!Array.isArray(data.skills) || data.skills.length < 3) errors.skills = 'Adicione pelo menos 3 habilidades.';
     if (!data.bio || data.bio.trim().length < 120) errors.bio = 'Escreva uma bio com pelo menos 120 caracteres.';
     if (!data.availability) errors.availability = 'Informe sua disponibilidade.';
+    if (!['available', 'busy', 'inactive'].includes(data.availability_status)) errors.availability_status = 'Informe seu status de disponibilidade.';
     if (!data.pricing_model) errors.pricing_model = 'Escolha um modelo de cobranca.';
     if (!data.hourly_rate && !data.project_rate_min) errors.price = 'Informe um valor base.';
 
@@ -47,6 +48,21 @@ router.get('/me', requireApiAuth, async (req, res) => {
 
         const profile = await new FreelancerProfileRepository().findByUserId(req.user.id);
         return res.status(200).json({ profile });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+
+router.get('/:id', requireApiAuth, async (req, res) => {
+    try {
+        const context = await new ProfileRepository().getContext(req.user);
+        if (context.profile_type !== 'client') {
+            return res.status(403).json({ message: 'Ambiente incompativel.' });
+        }
+
+        const freelancer = await new FreelancerProfileRepository().findPublishedById(req.params.id);
+        if (!freelancer) return res.status(404).json({ message: 'Freelancer nao encontrado.' });
+        return res.status(200).json({ freelancer });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

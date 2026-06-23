@@ -12,6 +12,7 @@ const profileColumns = {
     niches: "TEXT NOT NULL DEFAULT '[]'",
     project_types: "TEXT NOT NULL DEFAULT '[]'",
     availability: 'TEXT NULL',
+    availability_status: "TEXT NOT NULL DEFAULT 'available' CHECK(availability_status IN ('available', 'busy', 'inactive'))",
     work_model: 'TEXT NULL',
     experience_years: 'INTEGER NULL',
     result_highlight: 'TEXT NULL',
@@ -57,8 +58,10 @@ class FreelancerProfileRepository {
         await this.ensureColumns();
 
         const userId = data.user_id;
-        const row = await db.get(`SELECT id FROM freelancer_profiles WHERE user_id = ?`, [userId]);
+        const row = await db.get(`SELECT id, availability_status FROM freelancer_profiles WHERE user_id = ?`, [userId]);
+        let profileId = row?.id;
         const values = this.mapValues(data);
+        if (row?.availability_status === 'busy') values.availability_status = 'busy';
 
         await db.run(`UPDATE profiles SET user_type = 'freelancer', bio = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?`, [
             values.bio,
@@ -93,25 +96,28 @@ class FreelancerProfileRepository {
                     project_size = ?,
                     urgent_projects = ?,
                     profile_strength = ?,
+                    availability_status = ?,
                     status = ?,
                     updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
                  WHERE user_id = ?`,
                 [...Object.values(values).slice(0, -1), userId],
             );
         } else {
+            profileId = randomUUID();
             await db.run(
                 `INSERT INTO freelancer_profiles (
                     id, user_id, professional_title, hourly_rate, skills, portfolio_url,
                     category, level, location, languages, tools, niches, project_types,
                     availability, work_model, experience_years, result_highlight, education,
                     links, portfolio_items, pricing_model, project_rate_min, project_rate_max,
-                    response_time, project_size, urgent_projects, profile_strength, status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [randomUUID(), userId, ...Object.values(values).slice(0, -1)],
+                    response_time, project_size, urgent_projects, profile_strength,
+                    availability_status, status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [profileId, userId, ...Object.values(values).slice(0, -1)],
             );
         }
 
-        return { user_id: userId, status: values.status, profile_strength: values.profile_strength };
+        return { id: profileId, user_id: userId, status: values.status, profile_strength: values.profile_strength };
     }
 
     async listPublished() {
@@ -136,6 +142,7 @@ class FreelancerProfileRepository {
                 fp.total_reviews,
                 fp.completed_jobs,
                 fp.availability,
+                fp.availability_status,
                 fp.response_time,
                 fp.portfolio_items,
                 fp.links
@@ -152,6 +159,11 @@ class FreelancerProfileRepository {
             portfolio_items: parseJson(row.portfolio_items, []),
             links: parseJson(row.links, {}),
         }));
+    }
+
+    async findPublishedById(id) {
+        const freelancers = await this.listPublished();
+        return freelancers.find((freelancer) => freelancer.id === id) || null;
     }
 
     async findByUserId(userId) {
@@ -209,6 +221,9 @@ class FreelancerProfileRepository {
             project_size: data.project_size || null,
             urgent_projects: data.urgent_projects ? 1 : 0,
             profile_strength: data.profile_strength || 0,
+            availability_status: ['available', 'inactive', 'busy'].includes(data.availability_status)
+                ? data.availability_status
+                : 'available',
             status: data.status === 'published' ? 'published' : 'draft',
             bio: data.bio,
         };

@@ -1,0 +1,124 @@
+.hiring-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiring-card {
+  width: min(72rem, 100%);
+  margin: 0 auto;
+}
+
+.hiring-card h1 {
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+  font-size: 2.4rem;
+}
+
+.hiring-eyebrow {
+  color: var(--color-primary-hover);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hiring-state {
+  padding: var(--space-5);
+  border: 0.1rem dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.hiring-professional {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.hiring-professional strong,
+.hiring-professional span {
+  display: block;
+}
+
+.hiring-professional strong {
+  color: var(--color-text);
+  font-size: 1.8rem;
+}
+
+.hiring-professional span {
+  color: var(--color-text-muted);
+}
+
+.hiring-avatar {
+  display: grid;
+  width: 5.6rem;
+  height: 5.6rem;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.hiring-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-5) 0;
+}
+
+.hiring-details div {
+  padding: var(--space-3);
+  border: 0.1rem solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.hiring-details dt {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+}
+
+.hiring-details dd {
+  margin-top: var(--space-1);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.hiring-bio {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.hiring-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.hiring-actions .btn-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.form-alert {
+  margin-top: var(--space-4);
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+@media (max-width: 56rem) {
+  .hiring-details {
+    grid-template-columns: 1fr;
+  }
+
+  .hiring-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

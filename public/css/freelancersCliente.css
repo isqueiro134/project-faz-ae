@@ -77,6 +77,29 @@
   background: var(--color-primary-soft);
 }
 
+.availability-badge {
+  align-self: flex-start;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.availability-badge.available {
+  background: rgba(22, 163, 74, 0.16);
+  color: var(--color-primary-hover);
+}
+
+.availability-badge.busy {
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+}
+
+.availability-badge.inactive {
+  background: rgba(100, 116, 139, 0.16);
+  color: var(--color-text-muted);
+}
+
 .freelancer-topline {
   display: flex;
   align-items: center;
@@ -272,6 +295,18 @@
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-bottom: var(--space-5);
+}
+
+.availability-warning {
+  margin-bottom: var(--space-4);
+  color: #b45309;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.modal-card .btn-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 @media (max-width: 72rem) {

@@ -6,7 +6,10 @@
     "server": "node --watch app.js",
     "client": "vite",
     "dev": "npm run server & npm run client",
-    "build": "vite build"
+    "build": "vite build",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --config playwright.headed.config.js --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "keywords": [],
   "author": "Isaque Oliveira, Enzo Miashita, Pedro Gama e Ícaro Alexandre",
@@ -23,6 +26,7 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.0",
     "vite": "^8.0.14"
   }
 }

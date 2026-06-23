@@ -55,6 +55,12 @@ router.get('/freelancers', requirePageAuth, async (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../../public/pages/freelancersCliente.html'));
 });
 
+router.get('/contratar', requirePageAuth, async (req, res) => {
+    const context = await new ProfileRepository().getContext(req.user);
+    if (context.profile_type !== 'client') return res.redirect(context.redirect_to);
+    res.status(200).sendFile(path.join(__dirname, '../../public/pages/contratarFreelancer.html'));
+});
+
 router.get('/dashboard-freelancer', requirePageAuth, async (req, res) => {
     const context = await new ProfileRepository().getContext(req.user);
     if (context.profile_type !== 'freelancer') return res.redirect(context.redirect_to);

@@ -112,6 +112,7 @@ async function runMigrations(db) {
     niches TEXT NOT NULL DEFAULT '[]',
     project_types TEXT NOT NULL DEFAULT '[]',
     availability TEXT NULL,
+    availability_status TEXT NOT NULL DEFAULT 'available' CHECK(availability_status IN ('available', 'busy', 'inactive')),
     work_model TEXT NULL,
     experience_years INTEGER NULL,
     result_highlight TEXT NULL,
@@ -132,6 +133,26 @@ async function runMigrations(db) {
     updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
     FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
   )`);
+
+  const freelancerColumns = await db.all('PRAGMA table_info(freelancer_profiles)');
+  if (!freelancerColumns.some((column) => column.name === 'availability_status')) {
+    await db.run(`ALTER TABLE freelancer_profiles
+      ADD COLUMN availability_status TEXT NOT NULL DEFAULT 'available'
+      CHECK(availability_status IN ('available', 'busy', 'inactive'))`);
+  }
+
+  await db.run(`CREATE TABLE IF NOT EXISTS freelancer_hirings (
+    id TEXT PRIMARY KEY NOT NULL,
+    client_id TEXT NOT NULL,
+    freelancer_id TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'in_progress', 'completed', 'cancelled')),
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    FOREIGN KEY (client_id) REFERENCES client_profiles(id) ON DELETE CASCADE,
+    FOREIGN KEY (freelancer_id) REFERENCES freelancer_profiles(id) ON DELETE CASCADE
+  )`);
+  await db.run(`CREATE UNIQUE INDEX IF NOT EXISTS idx_active_hiring_freelancer
+    ON freelancer_hirings(freelancer_id)
+    WHERE status IN ('pending', 'in_progress')`);
 }
 
 /**

@@ -18,6 +18,18 @@ const currency = new Intl.NumberFormat('pt-BR', {
     currency: 'BRL',
 });
 
+const categoryOptions = [
+    ['desenvolvimento', 'Desenvolvimento de Software'],
+    ['design', 'Design'],
+    ['redacao', 'Redação'],
+];
+
+const availabilityStatus = {
+    available: { label: 'Disponível', className: 'available' },
+    busy: { label: 'Ocupado', className: 'busy' },
+    inactive: { label: 'Inativo', className: 'inactive' },
+};
+
 function escapeHtml(value = '') {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -78,10 +90,15 @@ const controller = {
 
     renderCategoryOptions() {
         const select = document.getElementById('category-filter');
-        const categories = [...new Set(this.freelancers.map((item) => item.category).filter(Boolean))].sort();
+        const knownValues = new Set(categoryOptions.map(([value]) => value));
+        const extraCategories = [...new Set(this.freelancers.map((item) => item.category).filter(Boolean))]
+            .filter((category) => !knownValues.has(category))
+            .sort()
+            .map((category) => [category, category]);
+        const categories = [...categoryOptions, ...extraCategories];
 
-        select.innerHTML = '<option value="">Todas</option>' + categories.map((category) => (
-            `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+        select.innerHTML = '<option value="">Todas</option>' + categories.map(([value, label]) => (
+            `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`
         )).join('');
     },
 
@@ -137,9 +154,10 @@ const controller = {
             `<span>${escapeHtml(skill)}</span>`
         )).join('');
         const isSelected = this.selected?.id === freelancer.id;
+        const availability = availabilityStatus[freelancer.availability_status] || availabilityStatus.available;
 
         return `
-            <article class="freelancer-card ${isSelected ? 'selected' : ''}">
+            <article class="freelancer-card ${isSelected ? 'selected' : ''}" data-freelancer-id="${escapeHtml(freelancer.id)}">
                 <div class="freelancer-topline">
                     <div class="avatar">${escapeHtml((freelancer.full_name || 'F').charAt(0))}</div>
                     <div>
@@ -147,6 +165,7 @@ const controller = {
                         <p>${escapeHtml(freelancer.professional_title || 'Perfil profissional')}</p>
                     </div>
                 </div>
+                <span class="availability-badge ${availability.className}">${availability.label}</span>
                 <div class="freelancer-meta">
                     <span><i class="fa-solid fa-layer-group"></i> ${escapeHtml(freelancer.category || 'Geral')}</span>
                     <span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(freelancer.location || 'Remoto')}</span>
@@ -164,6 +183,8 @@ const controller = {
     openModal(id) {
         const freelancer = this.freelancers.find((item) => item.id === id);
         if (!freelancer) return;
+        const availability = availabilityStatus[freelancer.availability_status] || availabilityStatus.available;
+        const canHire = freelancer.availability_status === 'available';
 
         const portfolio = (freelancer.portfolio_items || []).slice(0, 3).map((item) => `
             <li>
@@ -189,6 +210,7 @@ const controller = {
                 <span><strong>Categoria</strong>${escapeHtml(freelancer.category || 'Geral')}</span>
                 <span><strong>Valor</strong>${resolvePrice(freelancer)}</span>
                 <span><strong>Disponibilidade</strong>${escapeHtml(freelancer.availability || 'A combinar')}</span>
+                <span><strong>Status</strong>${availability.label}</span>
                 <span><strong>Resposta</strong>${escapeHtml(freelancer.response_time || 'A combinar')}</span>
             </div>
             <div class="skill-list modal-skills">
@@ -199,7 +221,10 @@ const controller = {
                 <ul>${portfolio || '<li><span>Nenhum projeto listado.</span></li>'}</ul>
                 <div class="profile-links">${links}</div>
             </div>
-            <button class="btn-primary" type="button" onclick="controller.selectFreelancer('${freelancer.id}')">Escolher freelancer</button>
+            ${canHire ? '' : '<p class="availability-warning" role="alert">Este profissional está indisponível para contratação.</p>'}
+            <button class="btn-primary" type="button" onclick="controller.selectFreelancer('${freelancer.id}')" ${canHire ? '' : 'disabled'}>
+                ${canHire ? 'Escolher freelancer' : 'Profissional indisponível'}
+            </button>
         `;
 
         document.getElementById('profile-modal').hidden = false;
@@ -210,10 +235,9 @@ const controller = {
     },
 
     selectFreelancer(id) {
-        this.selected = this.freelancers.find((item) => item.id === id) || null;
-        this.closeModal();
-        this.renderSelected();
-        this.renderFreelancers();
+        const freelancer = this.freelancers.find((item) => item.id === id);
+        if (!freelancer || freelancer.availability_status !== 'available') return;
+        window.location.href = `/contratar?freelancer_id=${encodeURIComponent(id)}`;
     },
 
     renderSelected() {

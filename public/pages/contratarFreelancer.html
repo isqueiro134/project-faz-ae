@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faz Aê - Confirmar contratação</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/contratarFreelancer.css">
+    <script src="../js/contratarFreelancer.js" type="module"></script>
+    <script src="../js/logout.js" type="module"></script>
+</head>
+
+<body>
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-box">FA</div>
+                <span>Faz Aê <small>Cliente</small></span>
+            </div>
+            <nav>
+                <p>Menu Principal</p>
+                <ul>
+                    <li><a href="/dashboard-cliente">Dashboard</a></li>
+                    <li class="active"><a href="/freelancers">Freelancers</a></li>
+                    <li><a href="/conta">Conta</a></li>
+                </ul>
+            </nav>
+            <button class="sidebar-logout" type="button" data-logout>Sair</button>
+        </aside>
+
+        <main class="main-content hiring-page">
+            <header class="header-top">
+                <div>Freelancers / <span class="breadcrumb-muted">Confirmar contratação</span></div>
+                <a class="btn-secondary" href="/freelancers">Voltar</a>
+            </header>
+
+            <section class="card hiring-card" aria-labelledby="hiring-title">
+                <span class="hiring-eyebrow">Revisão</span>
+                <h1 id="hiring-title">Confirmar contratação</h1>
+                <p class="card-subtitle">Confira os dados do profissional antes de continuar.</p>
+
+                <div id="hiring-state" class="hiring-state">Carregando profissional...</div>
+                <div id="hiring-summary" hidden>
+                    <div class="hiring-professional">
+                        <div class="hiring-avatar" id="hiring-avatar">FA</div>
+                        <div>
+                            <strong id="hiring-name"></strong>
+                            <span id="hiring-professional-title"></span>
+                        </div>
+                    </div>
+                    <dl class="hiring-details">
+                        <div><dt>Categoria</dt><dd id="hiring-category"></dd></div>
+                        <div><dt>Valor</dt><dd id="hiring-price"></dd></div>
+                        <div><dt>Disponibilidade</dt><dd id="hiring-availability"></dd></div>
+                    </dl>
+                    <p id="hiring-bio" class="hiring-bio"></p>
+                </div>
+
+                <p id="hiring-alert" class="form-alert" role="alert" aria-live="polite"></p>
+                <div class="hiring-actions">
+                    <a class="btn-secondary" href="/freelancers">Cancelar</a>
+                    <button class="btn-primary" id="confirm-hiring" type="button" disabled>Confirmar contratação</button>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -137,6 +137,31 @@ nav li.active {
   gap: var(--space-3);
 }
 
+.dashboard-alert {
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  font-weight: 700;
+}
+
+.dashboard-alert[hidden] {
+  display: none;
+}
+
+.dashboard-empty {
+  padding: var(--space-5);
+  border: 0.1rem dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.hiring-meta {
+  margin-top: var(--space-4);
+}
+
 .project-card {
   padding: var(--space-4);
   border: 0.1rem solid var(--color-border);

@@ -78,6 +78,7 @@ CREATE TABLE freelancer_profiles (
     niches TEXT NOT NULL DEFAULT '[]',
     project_types TEXT NOT NULL DEFAULT '[]',
     availability TEXT NULL,
+    availability_status TEXT NOT NULL DEFAULT 'available' CHECK(availability_status IN ('available', 'busy', 'inactive')),
     work_model TEXT NULL,
     experience_years INTEGER NULL,
     result_highlight TEXT NULL,
@@ -98,6 +99,20 @@ CREATE TABLE freelancer_profiles (
     updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
     FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
 );
+
+CREATE TABLE freelancer_hirings (
+    id TEXT PRIMARY KEY NOT NULL,
+    client_id TEXT NOT NULL,
+    freelancer_id TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'in_progress', 'completed', 'cancelled')),
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    FOREIGN KEY (client_id) REFERENCES client_profiles(id) ON DELETE CASCADE,
+    FOREIGN KEY (freelancer_id) REFERENCES freelancer_profiles(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX idx_active_hiring_freelancer
+    ON freelancer_hirings(freelancer_id)
+    WHERE status IN ('pending', 'in_progress');
 
 CREATE TABLE jobs (
     -- SQLite não tem gen_random_uuid() nativo, usamos TEXT para UUIDs gerados pela aplicação

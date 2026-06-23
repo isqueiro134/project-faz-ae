@@ -258,6 +258,7 @@ function collectData(status = 'draft') {
         niches: splitList(data.get('niches') || ''),
         project_types: savedProfile?.project_types || [],
         availability: data.get('availability'),
+        availability_status: data.get('availability_status'),
         work_model: data.get('work_model'),
         bio: data.get('bio')?.trim(),
         experience_years: Number(data.get('experience_years')) || null,
@@ -294,6 +295,7 @@ function normalizeProfileForCompare(profile) {
         niches: profile.niches || [],
         project_types: profile.project_types || [],
         availability: profile.availability || '',
+        availability_status: profile.availability_status || 'available',
         work_model: profile.work_model || '',
         bio: profile.bio || '',
         experience_years: profile.experience_years || null,
@@ -422,6 +424,7 @@ function validateUrl(field, errors, message) {
 function validatePortfolio(errors) {
     const items = [...portfolioList.querySelectorAll('.portfolio-item')];
     let hasCompleteProject = false;
+    let firstInvalidField = null;
 
     items.forEach((item) => {
         const title = item.querySelector('[name="project_title"]');
@@ -439,15 +442,21 @@ function validatePortfolio(errors) {
         setInvalid(url, !urlValid);
         setInvalid(description, !descriptionValid);
 
+        firstInvalidField ||= [
+            [title, titleValid],
+            [category, categoryValid],
+            [url, urlValid],
+            [description, descriptionValid],
+        ].find(([, valid]) => !valid)?.[0] || null;
+
         if (titleValid && categoryValid && urlValid && descriptionValid) {
             hasCompleteProject = true;
         }
     });
 
     if (!hasCompleteProject) {
-        const firstField = portfolioList.querySelector('.portfolio-item .input');
         errors.push({
-            field: firstField,
+            field: firstInvalidField || portfolioList.querySelector('.portfolio-item .input'),
             message: 'Preencha pelo menos um projeto com título, categoria, link válido e descrição de 80 caracteres.',
         });
     }
@@ -463,6 +472,7 @@ function validateStep(stepIndex) {
         requireField(form.elements.category, errors, 'Escolha sua área principal.');
         requireField(form.elements.level, errors, 'Escolha seu nível profissional.');
         requireField(form.elements.location, errors, 'Informe sua localização ou remoto com pelo menos 4 caracteres.');
+        requireField(form.elements.availability_status, errors, 'Informe seu status de disponibilidade.');
     }
 
     if (stepIndex === 1) {
@@ -558,6 +568,7 @@ function applyProfileData(profile) {
         tools: profile.tools?.join(', '),
         niches: profile.niches?.join(', '),
         availability: profile.availability,
+        availability_status: profile.availability_status || 'available',
         work_model: profile.work_model,
         bio: profile.bio,
         experience_years: profile.experience_years,
@@ -609,6 +620,7 @@ function loadDraft() {
         tools: draft.tools?.join(', '),
         niches: draft.niches?.join(', '),
         availability: draft.availability,
+        availability_status: draft.availability_status || 'available',
         work_model: draft.work_model,
         bio: draft.bio,
         experience_years: draft.experience_years,
